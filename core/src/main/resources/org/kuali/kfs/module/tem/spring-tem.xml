@@ -603,7 +603,7 @@
     <bean id="removeImportedExpenseEvent" class="org.kuali.kfs.module.tem.document.web.struts.RemoveImportedExpenseEvent">
     </bean>
     
-    <bean id="g" class="org.kuali.kfs.module.tem.document.web.struts.AddImportedExpenseDetailEvent">
+    <bean id="addImportedExpenseDetailEvent" class="org.kuali.kfs.module.tem.document.web.struts.AddImportedExpenseDetailEvent">
     </bean>  
     <bean id="removeImportedExpenseDetailEvent" class="org.kuali.kfs.module.tem.document.web.struts.RemoveImportedExpenseDetailEvent">
     </bean>
