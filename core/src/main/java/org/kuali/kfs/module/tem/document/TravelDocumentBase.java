@@ -1976,5 +1976,10 @@ public abstract class TravelDocumentBase extends AccountingDocumentBase implemen
     public boolean hasCustomDVDistribution(){
        return false;
     }
-   
+    
+    /**
+     * @see org.kuali.kfs.module.tem.document.TravelDocument#addGroupTraveler(GroupTraveler)
+     */
+    public void addGroupTraveler(final GroupTraveler traveler);
+
 }
