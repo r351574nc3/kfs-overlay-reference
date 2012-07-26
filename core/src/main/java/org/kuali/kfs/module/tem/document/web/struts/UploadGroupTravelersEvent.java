@@ -21,21 +21,22 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.kuali.kfs.module.tem.businessobject.ActualExpense;
+import org.kuali.kfs.module.tem.businessobject.GroupTraveler;
 import org.kuali.kfs.module.tem.document.TravelDocument;
 import org.kuali.kfs.module.tem.document.service.TravelDocumentService;
 import org.kuali.kfs.module.tem.document.web.bean.TravelMvcWrapperBean;
-import org.kuali.kfs.module.tem.service.AccountingDistributionService;
+import org.kuali.kfs.module.tem.util.UploadParser;
 import org.kuali.kfs.sys.context.SpringContext;
 import org.kuali.rice.kns.service.KualiRuleService;
 
-public class RemoveActualExpenseEvent implements Observer {
+public class UploadGroupTravelersEvent implements Observer {
     private static final int WRAPPER_ARG_IDX       = 0;
     private static final int SELECTED_LINE_ARG_IDX = 1;
+    protected static final String[] GROUP_TRAVELER_ATTRIBUTE_NAMES = { "travelerTypeCode", "groupTravelerEmpId", "name" };
+
     
     protected TravelDocumentService travelDocumentService;
     protected KualiRuleService ruleService;
-    protected AccountingDistributionService accountingDistributionService;
     
     @Override
     public void update(Observable arg0, Object arg1) {
@@ -48,19 +49,36 @@ public class RemoveActualExpenseEvent implements Observer {
             return;
         }
         final TravelMvcWrapperBean wrapper = (TravelMvcWrapperBean) args[WRAPPER_ARG_IDX];
-
         final TravelDocument document = wrapper.getTravelDocument();
-        final Integer deleteIndex = (Integer) args[SELECTED_LINE_ARG_IDX];
         
-        ActualExpense line = document.getActualExpenses().get(deleteIndex.intValue());
-        document.removeExpense(line, deleteIndex);
-        wrapper.getNewActualExpenseLines().remove(deleteIndex.intValue());
-                
-        List<ActualExpense> actualExpenses = wrapper.getNewActualExpenseLines();
-                
-        //wrapper.getNewActualExpenseLines().add(new ActualExpense());
-        wrapper.setDistribution(getAccountingDistributionService().buildDistributionFrom(document));
+        final String tabErrorKey = "groupTraveler";
+        try {
+            final List<Object> importedGroupTravelers = UploadParser.importFile(wrapper.getGroupTravelerImportFile(), 
+                                                            GroupTraveler.class, 
+                                                            GROUP_TRAVELER_ATTRIBUTE_NAMES, 
+                                                            null, null, tabErrorKey);
+            // importedGroupTraveler = UploadParser.importFile(reqForm.getGroupTravelerImportFile(), GroupTraveler.class, GROUP_TRAVELER_ATTRIBUTE_NAMES, tabErrorKey);
+            
+            // validate imported items
+            boolean allPassed = true;
+            int itemLineNumber = 0;
+            for (Object o : importedGroupTravelers) {
+                allPassed &= getKualiRuleService().applyRules(new AddGroupTravelLineEvent("newGroupTravelerLine", travelDoc, (GroupTraveler) o));
+            }
+            if (allPassed) {
+                for (Object o : importedGroupTraveler) {
+                    GroupTraveler groupTraveler = (GroupTraveler) o;
+                    groupTraveler.setDocumentNumber(travelDoc.getDocumentNumber());
+                    groupTraveler.setFinancialDocumentLineNumber(travelDoc.getGroupTravelers().size() + 1);
+                    travelDoc.getGroupTravelers().add(groupTraveler);
+                }
+            }
+        }
+        catch (UploadParserException e) {
+            GlobalVariables.getMessageMap().putError(tabErrorKey, e.getErrorKey(), e.getErrorParameters());
+        }
     }
+  
   
     /**
      * Gets the travelReimbursementService attribute.
@@ -68,7 +86,11 @@ public class RemoveActualExpenseEvent implements Observer {
      * @return Returns the travelReimbursementService.
      */
     protected TravelDocumentService getTravelDocumentService() {
-        return SpringContext.getBean(TravelDocumentService.class);
+        return travelDocumentService;
+    }
+    
+    protected void setTravelDocumentService(final TravelDocumentService travelDocumentService) {
+        this.travelDocumentService = travelDocumentService;
     }
 
     /**
@@ -77,10 +99,10 @@ public class RemoveActualExpenseEvent implements Observer {
      * @return Returns the kualiRuleseService.
      */
     protected KualiRuleService getRuleService() {
-        return SpringContext.getBean(KualiRuleService.class);
+        return ruleService;
     }
     
-    protected AccountingDistributionService getAccountingDistributionService() {
-        return SpringContext.getBean(AccountingDistributionService.class);
-    }  
+    protected void setRuleService(final KualiRuleService ruleService) {
+        this.ruleService = ruleService;
+    }
 }
