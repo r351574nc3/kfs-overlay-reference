@@ -1980,6 +1980,17 @@ public abstract class TravelDocumentBase extends AccountingDocumentBase implemen
     /**
      * @see org.kuali.kfs.module.tem.document.TravelDocument#addGroupTraveler(GroupTraveler)
      */
-    public void addGroupTraveler(final GroupTraveler traveler);
+    @Override
+    @Transient
+    public void addGroupTraveler(final GroupTraveler traveler) {
+        final String sequenceName = traveler.getSequenceName();
+        // Because all expense types use the same sequence, it doesn't matter which class grabs the sequence
+        final Long sequenceNumber = getSequenceAccessorService().getNextAvailableSequenceNumber(sequenceName, ImportedExpense.class);
+        traveler.setId(sequenceNumber);
+        traveler.setDocumentNumber(this.documentNumber);
+        
+        getGroupTravelers().add(traveler);
+        notifyChangeListeners(new PropertyChangeEvent(this, "groupTravelers", null, traveler));
+    }
 
 }
