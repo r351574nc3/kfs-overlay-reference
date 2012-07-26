@@ -278,5 +278,11 @@ public interface TravelMvcWrapperBean {
 
     void setAccountDistributionsourceAccountingLines(List<TemDistributionAccountingLine> accountDistributionsourceAccountingLines);
 
-    InputStream getGroupTravelerImportStream() throws Exception {
+    /**
+     *  Completely reads all the files bytes into memory.
+     *  
+     * @return InputStream of all the bytes
+     * @throws an Exception if there's a problem with the input data (like it can't be read for some reason)
+     */
+    InputStream getGroupTravelerImportStream() throws Exception;
 }

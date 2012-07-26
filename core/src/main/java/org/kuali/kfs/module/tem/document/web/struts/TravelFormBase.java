@@ -794,10 +794,11 @@ public abstract class TravelFormBase extends KualiAccountingDocumentFormBase imp
      *  
      * @return InputStream of all the bytes
      * @throws an Exception if there's a problem with the input data (like it can't be read for some reason)
+     * @see org.kuali.kfs.module.tem.document.web.bean.TravelMvcWrapperBean
      */
     public InputStream getGroupTravelerImportStream() throws Exception {
-        final InputStream dis  = new DataInputStream(getGroupTravelerImportFile().getInputStream());
-        final byte[] fileBytes = new byte[getGroupTravelerImportFile().getFileSize()];
+        final DataInputStream dis  = new DataInputStream(getGroupTravelerImportFile().getInputStream());
+        final byte[] fileBytes     = new byte[getGroupTravelerImportFile().getFileSize()];
         dis.readFully(fileBytes);
         return new ByteArrayInputStream(fileBytes);
     }

@@ -25,11 +25,21 @@ import java.util.Observer;
 import org.kuali.kfs.module.tem.businessobject.GroupTraveler;
 import org.kuali.kfs.module.tem.document.TravelDocument;
 import org.kuali.kfs.module.tem.document.service.TravelDocumentService;
+import org.kuali.kfs.module.tem.document.validation.event.AddGroupTravelLineEvent;
 import org.kuali.kfs.module.tem.document.web.bean.TravelMvcWrapperBean;
 import org.kuali.kfs.module.tem.util.UploadParser;
+import org.kuali.kfs.module.tem.util.UploadParserException;
 import org.kuali.kfs.sys.context.SpringContext;
 import org.kuali.rice.kns.service.KualiRuleService;
+import org.kuali.rice.kns.util.GlobalVariables;
 
+/**
+ * Fires when the import group travelers button is clicked. Handles importing {@link GroupTraveler}
+ * instances from a CSV formatted file
+ *  
+ * @author Leo Przybylski (leo [at] rsmart.com)
+ * @since 5.0
+ */
 public class UploadGroupTravelersEvent implements Observer {
     private static final int WRAPPER_ARG_IDX       = 0;
     private static final int SELECTED_LINE_ARG_IDX = 1;
@@ -54,7 +64,7 @@ public class UploadGroupTravelersEvent implements Observer {
         
         final String tabErrorKey = "groupTraveler";
         try {
-                final List<Object> importedGroupTravelers = new ArrayList();
+                final List<GroupTraveler> importedGroupTravelers = new ArrayList<GroupTraveler>();
                 /*UploadParser.importFile(wrapper.getGroupTravelerImportFile(), 
                                                             GroupTraveler.class, 
                                                             GROUP_TRAVELER_ATTRIBUTE_NAMES, 
@@ -64,15 +74,21 @@ public class UploadGroupTravelersEvent implements Observer {
             // validate imported items
             boolean allPassed = true;
             int itemLineNumber = 0;
-            for (Object o : importedGroupTravelers) {
-                allPassed &= getKualiRuleService().applyRules(new AddGroupTravelLineEvent("newGroupTravelerLine", travelDoc, (GroupTraveler) o));
+            for (final GroupTraveler traveler : importedGroupTravelers) {
+                final AddGroupTravelLineEvent event = new AddGroupTravelLineEvent("newGroupTravelerLine", document, traveler);
+                allPassed &= getRuleService().applyRules(event);
+
+
             }
             if (allPassed) {
-                for (Object o : importedGroupTraveler) {
+                for (final GroupTraveler traveler : importedGroupTravelers) {
+                    document.addGroupTraveler(traveler);
+                    /*                    
                     GroupTraveler groupTraveler = (GroupTraveler) o;
                     groupTraveler.setDocumentNumber(travelDoc.getDocumentNumber());
                     groupTraveler.setFinancialDocumentLineNumber(travelDoc.getGroupTravelers().size() + 1);
                     travelDoc.getGroupTravelers().add(groupTraveler);
+                    */
                 }
             }
         }
