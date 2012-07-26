@@ -1,0 +1,4 @@
+<config>
+    <param name="module.name">kfs-tem</param>
+    <param name="additional.config.locations">classpath:META-INF/database-config-defaults.xml,classpath:META-INF/url-config-defaults.xml,classpath:META-INF/rice-config-defaults.xml,classpath:META-INF/kfs-config-defaults.xml,classpath:META-INF/web-config-defaults.xml,${user.home}/kuali/main/${environment}/common-config.xml,${user.home}/kuali/main/${environment}/${module.name}-config.xml</param>
+</config>

@@ -1,0 +1,17 @@
+<config>
+
+    <param name="appserver.url">http://localhost:8080</param>
+
+    <param name="application.url">${appserver.url}/kfs-tem</param>
+
+    <param name="cas.url">${appserver.url}/cas</param>
+
+    <param name="externalizable.static.content.url">${application.url}/static</param>
+
+
+    <param name="externalizable.help.url">${externalizable.static.content.url}/help/</param>
+    <param name="externalizable.images.url">${externalizable.static.content.url}/images/</param>
+    <param name="externalizable.xml.url">${externalizable.static.content.url}/xml/</param>
+
+    <param name="kc.application.url">http://test.kc.kuali.org/kc-trunk</param>
+</config>
