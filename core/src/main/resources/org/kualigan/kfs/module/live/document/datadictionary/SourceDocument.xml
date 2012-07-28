@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns:dd="http://rice.kuali.org/dd" xsi:schemaLocation="http://www.springframework.org/schema/beans         http://www.springframework.org/schema/beans/spring-beans-2.0.xsd         http://rice.kuali.org/dd         http://rice.kuali.org/dd/dd.xsd">
+<!--
+ Copyright 2007-2009 The Kuali Foundation
+ 
+ Licensed under the Educational Community License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.opensource.org/licenses/ecl2.php
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+  <bean id="SourceDocument" parent="SourceDocument-parentBean"/>
+
+  <bean id="SourceDocument-parentBean" abstract="true" parent="AccountingDocumentEntry">
+    
+    <property name="documentTypeName" value="SOURCE"/>
+    <property name="documentClass" value="org.kualigan.kfs.module.live.document.SourceDocumentBase"/>
+
+    <property name="validationMap" ref="SourceDocument-validations"/>
+
+    <property name="importedLineParserClass" value="org.kuali.kfs.sys.businessobject.AccountingLineParserBase"/>
+
+    <property name="workflowAttributes">
+    	<ref bean="SourceDocument-workflowAttributes"/>
+    </property>
+    
+  </bean>
+  
+  <!-- Validations -->
+  
+  <bean id="SourceDocument-validations" parent="SourceDocument-validations-parentBean"/>
+  
+  <bean id="SourceDocument-validations-parentBean" abstract="true"  class="org.springframework.beans.factory.config.MapFactoryBean">
+  	<property name="sourceMap">
+		<map />
+    </property>
+  </bean>
+  
+  	<!-- workflow attributes for routing -->
+	<bean id="SourceDocument-workflowAttributes" parent="SourceDocument-workflowAttributes-parentBean"/>
+	
+	<bean id="SourceDocument-workflowAttributes-parentBean" abstract="true" parent="WorkflowAttributes">
+	</bean>
+</beans>
