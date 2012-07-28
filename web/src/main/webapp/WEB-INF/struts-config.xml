@@ -293,7 +293,7 @@
             type="org.kuali.kfs.module.tem.document.web.struts.TaxableRamificationForm" />            
 
     	<form-bean name="SourceForm"
-			type="org.kualigan.kfs.module.live.SourceForm" />
+			type="org.kualigan.kfs.module.live.document.web.struts.SourceForm" />
     </form-beans>
 
 	<global-exceptions>
