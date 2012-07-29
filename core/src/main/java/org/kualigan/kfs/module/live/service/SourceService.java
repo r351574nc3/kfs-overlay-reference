@@ -15,6 +15,8 @@
  */
 package org.kualigan.kfs.module.live.service;
 
+import java.util.List;
+
 import org.kualigan.kfs.module.live.businessobject.Source;
 
 /**
@@ -23,6 +25,6 @@ import org.kualigan.kfs.module.live.businessobject.Source;
  */
 public interface SourceService {
  
-    Source listSources();
+    List<Source> listSources();
 }
  

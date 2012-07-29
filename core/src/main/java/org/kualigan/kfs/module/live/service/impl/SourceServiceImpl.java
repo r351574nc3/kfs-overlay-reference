@@ -15,6 +15,8 @@
  */
 package org.kualigan.kfs.module.live.service.impl;
 
+import java.util.List;
+
 import org.kualigan.kfs.module.live.businessobject.Source;
 
 /**
@@ -26,7 +28,8 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
      * @see org.kualigan.kfs.module.live.businessobject.Source;
      * @see org.kualigan.kfs.module.live.service.SourceService;
      */
-    public Source listSources() {
+    public List<Source> listSources() {
+        return null;
     }
 }
  
