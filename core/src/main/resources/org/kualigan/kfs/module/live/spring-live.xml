@@ -33,13 +33,11 @@
 				<value>org/kualigan/kfs/module/live/document/datadictionary</value>
 			</list>
 		</property>
-        <!--
 		<property name="scriptConfigurationFilePaths">
 			<list>
 				<value>org/kuali/kfs/module/live/dwr-live.xml</value>
 			</list>
 		</property>
-        -->
 		<property name="databaseRepositoryFilePaths">
 			<list>
 				<value>org/kualigan/kfs/module/live/ojb-live.xml</value>
