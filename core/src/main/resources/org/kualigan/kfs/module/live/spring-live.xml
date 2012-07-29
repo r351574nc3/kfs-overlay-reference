@@ -30,9 +30,9 @@
 		</property>
 		<property name="dataDictionaryPackages">
 			<list>
-				<value>org/kuali/kfs/module/live/businessobject/datadictionary</value>
-				<value>org/kuali/kfs/module/live/document/datadictionary</value>
-				<value>org/kuali/kfs/module/live/datadictionary</value>
+				<value>org/kualigan/kfs/module/live/businessobject/datadictionary</value>
+				<value>org/kualigan/kfs/module/live/document/datadictionary</value>
+				<value>org/kualigan/kfs/module/live/datadictionary</value>
 			</list>
 		</property>
         <!--

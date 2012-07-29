@@ -15,5 +15,9 @@
  */
 package org.kualigan.kfs.module.live.document;
 
+/**
+ *
+ * @author Leo Przybylski (leo [at] rsmart.com)
+ */
 public interface SourceDocument {
 }

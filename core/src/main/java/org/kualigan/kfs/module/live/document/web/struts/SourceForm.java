@@ -20,8 +20,9 @@ import org.kuali.rice.kns.web.struts.form.KualiTransactionalDocumentFormBase;
 import org.kualigan.kfs.module.live.document.JavaDocument;
 import org.kualigan.kfs.module.live.document.SourceDocument;
 
-/**
+import org.kuali.rice.kns.service.DocumentService;
 
+/**
  *
  */
 public class SourceForm extends KualiTransactionalDocumentFormBase {
@@ -39,10 +40,23 @@ public class SourceForm extends KualiTransactionalDocumentFormBase {
         return "SOURCE";
     }
     
+    protected void instantiateDocument() {
+        try {
+            final SourceDocument document = (SourceDocument) getDocumentService().getNewDocument(org.kualigan.kfs.module.live.document.SourceDocumentBase.class);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     /**
      * @return Returns the serviceBillingDocument.
      */
     public SourceDocument getSourceDocument() {
         return (SourceDocument) getDocument();
+    }
+    
+    public DocumentService getDocumentService() {
+        return org.kuali.kfs.sys.context.SpringContext.getBean(DocumentService.class);
     }
 }

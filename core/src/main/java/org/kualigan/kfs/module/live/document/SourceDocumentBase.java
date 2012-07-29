@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kualigan.kfs.module.live.document.web.struts;
+package org.kualigan.kfs.module.live.document;
  
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,11 +23,29 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
- 
+
+import org.kuali.rice.kns.document.TransactionalDocumentBase;
+
+/**
+ * 
+ * @author Leo Przybylski (leo [at] rsmart.com)
+ */
 public class SourceDocumentBase extends TransactionalDocumentBase implements SourceDocument {
     @Id
-    @GeneratedValue(generator="TEM_PER_DIEM_ID_SEQ")
-    @SequenceGenerator(name="TEM_PER_DIEM_ID_SEQ",sequenceName="TEM_PER_DIEM_ID_SEQ", allocationSize=5)
+    @GeneratedValue(generator="SOURCE_DOCUMENT_ID_SEQ")
+    @SequenceGenerator(name="SOURCE_DOCUMENT_ID_SEQ",sequenceName="SOURCE_DOCUMENT_ID_SEQ", allocationSize=5)
     @Column(name="id",nullable=false)
-    private Long id;   
+    private Long id;
+    
+    public Long getId() {
+        return id;
+    }
+    
+    public void setId(final Long id) {
+        this.id = id;
+    }
+    
+    public String getDefaultParentDocType() {
+        return "FP";
+    }
 }

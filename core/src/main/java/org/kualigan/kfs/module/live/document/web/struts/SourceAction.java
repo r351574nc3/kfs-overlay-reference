@@ -15,7 +15,7 @@
  */
 package org.kualigan.kfs.module.live.document.web.struts;
 
-import org.kuali.rice.kns.web.struts.form.KualiTransactionalDocumentActionBase;
+import org.kuali.rice.kns.web.struts.action.KualiTransactionalDocumentActionBase;
 
 
 /**
