@@ -30,6 +30,7 @@ import org.kuali.rice.kns.document.TransactionalDocumentBase;
 
 /**
  *
+ * @author Leo Przybylski (leo [at] rsmart.com)
  */
 public class JavaDocument extends TransactionalDocumentBase {
 	private static final long serialVersionUID = 4085595017286298432L;

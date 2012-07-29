@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- package org.kualigan.kfs.module.businessobject;
+ package org.kualigan.kfs.module.live.businessobject;
  
  
  /**
