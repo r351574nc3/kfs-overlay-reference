@@ -28,10 +28,7 @@
 	showTabButtons="true">
 
 <sys:documentOverview editingMode="${KualiForm.editingMode}" />
-<<<<<<< HEAD
-=======
 
->>>>>>> master
 <kul:tab tabTitle="Files" defaultOpen="true" tabErrorKey="${Constants.DOCUMENT_NOTES_ERRORS},attachmentFile"
                  transparentBackground="${transparentBackground}" >
   <div id="tab-Files-container" class="tab-container">

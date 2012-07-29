@@ -108,6 +108,10 @@
              </c:if>
          </ul>
    	 </c:if>
+     <strong>Live</strong><br />
+     <ul class="chan">
+         <li><portal:portalLink displayTitle="true" title="Source" url="liveSource.do?methodToCall=docHandler&command=initiate&docTypeName=SOURCE" /></li>
+    </ul>
 </div>
 <channel:portalChannelBottom />
 
