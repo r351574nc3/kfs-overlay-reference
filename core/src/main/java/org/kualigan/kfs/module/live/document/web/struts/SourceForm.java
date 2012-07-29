@@ -37,15 +37,18 @@ public class SourceForm extends KualiTransactionalDocumentFormBase {
 
     @Override
     protected String getDefaultDocumentTypeName() {
-        return "SOURCE";
+        return "org.kualigan.kfs.module.live.document.SourceDocumentBase";
     }
     
     protected void instantiateDocument() {
         try {
             final SourceDocument document = (SourceDocument) getDocumentService().getNewDocument(org.kualigan.kfs.module.live.document.SourceDocumentBase.class);
+            setDocument((org.kuali.rice.kns.document.Document) document);
         }
         catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            // throw new RuntimeException(e);
+            setDocument(new org.kualigan.kfs.module.live.document.SourceDocumentBase());
         }
     }
     

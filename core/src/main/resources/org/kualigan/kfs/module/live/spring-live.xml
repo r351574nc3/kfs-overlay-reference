@@ -19,32 +19,31 @@
 
 	<bean id="liveModuleConfiguration" parent="liveModuleConfiguration-parentBean" />
 
-	<bean id="liveModuleConfiguration-parentBean" class="org.kuali.kfs.sys.FinancialSysliveModuleConfiguration"
+	<bean id="liveModuleConfiguration-parentBean" class="org.kuali.kfs.sys.FinancialSystemModuleConfiguration"
 		abstract="true">
 		<property name="namespaceCode" value="KFS-live" />
 		<property name="initializeDataDictionary" value="true" />
 		<property name="packagePrefixes">
 			<list>
-				<value>org.kuali.kfs.module.live</value>
+				<value>org.kualigan.kfs.module.live</value>
 			</list>
 		</property>
 		<property name="dataDictionaryPackages">
 			<list>
-				<value>org/kualigan/kfs/module/live/businessobject/datadictionary</value>
 				<value>org/kualigan/kfs/module/live/document/datadictionary</value>
-				<value>org/kualigan/kfs/module/live/datadictionary</value>
 			</list>
 		</property>
         <!--
 		<property name="scriptConfigurationFilePaths">
 			<list>
 				<value>org/kuali/kfs/module/live/dwr-live.xml</value>
-			</list>
+			</list>
 		</property>
         -->
 		<property name="databaseRepositoryFilePaths">
 			<list>
-				<value>org/kuali/kfs/module/live/ojb-live.xml</value>
+				<value>org/kualigan/kfs/module/live/ojb-live.xml</value>
 			</list>
 		</property>
+    </bean>
 </beans>

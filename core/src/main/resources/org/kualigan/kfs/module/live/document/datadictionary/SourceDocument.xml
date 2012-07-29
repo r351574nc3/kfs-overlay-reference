@@ -39,4 +39,5 @@
  	      </list>
 	    </property>
         -->
+    </bean>
 </beans>
