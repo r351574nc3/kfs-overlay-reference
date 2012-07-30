@@ -40,7 +40,7 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
      * @see org.kualigan.kfs.module.live.businessobject.Source;
      * @see org.kualigan.kfs.module.live.service.SourceService;
      */
-    public List<Source> listSources() {
+    public List<Source> listSources() throws Exception {
         final String repodir = System.getProperty("user.dir"); 
         final FileRepositoryBuilder builder = new FileRepositoryBuilder();
         final Repository repository = builder.setGitDir(new File(repodir))
