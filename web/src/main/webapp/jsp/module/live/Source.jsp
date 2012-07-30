@@ -17,10 +17,11 @@
 <style>
     #editor {
         position: absolute;
-        width: 90%;
+        width: 95%;
         height: 480px;
     }
 </style>
+<script src="scripts/module/live/source.js" type="text/javascript" charset="utf-8"></script>
 
 <kul:documentPage showDocumentInfo="true"
 	documentTypeName="org.kualigan.kfs.module.live.document.SourceDocumentBase"
@@ -32,6 +33,10 @@
 <kul:tab tabTitle="Files" defaultOpen="true" tabErrorKey="${Constants.DOCUMENT_NOTES_ERRORS},attachmentFile"
                  transparentBackground="${transparentBackground}" >
   <div id="tab-Files-container" class="tab-container">
+    <script>
+        listFiles();
+    </script>
+
   </div>
 </kul:tab>
 
