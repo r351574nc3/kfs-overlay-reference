@@ -70,6 +70,7 @@ limitations under the License.
     <log4j.version>1.2.17</log4j.version>
     <maven-clean-plugin.version>2.5</maven-clean-plugin.version>
     <maven-resources-plugin.version>2.5</maven-resources-plugin.version>
+    <maven-scm-providers-git.version>1.6</maven-scm-providers-git.version>
     <mysql-connector-java.version>5.1.16</mysql-connector-java.version>
     <ojdbc6.version>11.2.0.2</ojdbc6.version>
     <rice.version>1.0.3</rice.version>
@@ -599,7 +600,7 @@ limitations under the License.
     	    		<groupId>xml-apis</groupId>
     	    	</exclusion>
     	    </exclusions>
-    	</dependency>
+    	</dependency>         
     </dependencies>
   </dependencyManagement>
   
@@ -665,13 +666,16 @@ limitations under the License.
             </overlays>
           </configuration>
         </plugin>
-        <plugin>
-          <groupId>org.apache.maven.scm</groupId>
-          <artifactId>maven-scm-providers-git</artifactId>
-          <version>1.7</version>
-        </plugin>
       </plugins>
     </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.scm</groupId>
+        <artifactId>maven-scm-providers-git</artifactId>
+        <version>${maven-scm-providers-git.version}</version>
+      </plugin>
+    </plugins>
   </build>
 
   <profiles>
@@ -802,17 +806,26 @@ limitations under the License.
    </profile>
   </profiles>
 
+  <scm>
+    <connection>scm:git:git://github.com/r351574nc3/kfs-overlay-reference.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/r351574nc3/kfs-overlay-reference.git</developerConnection>
+    <url>https://github.com/r351574nc3/kfs-overlay-reference</url>
+  </scm>
+
   <repositories>
     <repository>
       <id>github</id>
       <name>Kualigan at GitHub</name>
       <url>http://kualigan.github.com/repository</url>
     </repository>   
+
+
   </repositories>
   <modules>
     <module>config</module>
     <module>core</module>
     <module>web</module>
     <module>it</module>
+    <module>dev</module>
   </modules>
 </project>
