@@ -35,7 +35,7 @@
 		</property>
 		<property name="scriptConfigurationFilePaths">
 			<list>
-				<value>org/kuali/kfs/module/live/dwr-live.xml</value>
+				<value>org/kualigan/kfs/module/live/dwr-live.xml</value>
 			</list>
 		</property>
 		<property name="databaseRepositoryFilePaths">
@@ -43,5 +43,8 @@
 				<value>org/kualigan/kfs/module/live/ojb-live.xml</value>
 			</list>
 		</property>
+    </bean>
+    
+    <bean id="sourceService" class="org.kualigan.kfs.module.live.service.impl.SourceServiceImpl">
     </bean>
 </beans>
