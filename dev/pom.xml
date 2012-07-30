@@ -33,13 +33,18 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.kualigan.kfs</groupId>
+      <groupId>com.rsmart.kuali.kfs</groupId>
       <artifactId>kfs-tem-core</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
     </dependency>
+    	<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		</dependency>
   </dependencies>
   
     <profiles>

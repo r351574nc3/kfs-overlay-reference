@@ -15,14 +15,20 @@
  */
 package org.kualigan.kfs.module.live.service.impl;
 
+import java.io.File;
+
 import java.util.List;
 
 import org.kualigan.kfs.module.live.businessobject.Source;
 
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.FileMode;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.AbstractTreeIterator;
 import org.eclipse.jgit.treewalk.TreeWalk;
+
+import static org.kualigan.kfs.logging.SimpleLogger.*;
 
 /**
  * 
@@ -35,10 +41,16 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
      * @see org.kualigan.kfs.module.live.service.SourceService;
      */
     public List<Source> listSources() {
-		final TreeWalk walk = new TreeWalk(db);
+        final String repodir = System.getProperty("user.dir"); 
+        final FileRepositoryBuilder builder = new FileRepositoryBuilder();
+        final Repository repository = builder.setGitDir(new File(repodir))
+              .readEnvironment() 
+              .findGitDir() 
+              .build();
+        final TreeWalk walk = new TreeWalk(repository);
+/*
 		walk.setRecursive(recursive);
 		walk.addTree(tree);
-
 		while (walk.next()) {
 			final FileMode mode = walk.getFileMode(0);
 			if (mode == FileMode.TREE)
@@ -54,10 +66,14 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
 			out.print(walk.getPathString());
 			out.println();
 		}
-
+*/
         return null;
     }
 
-    public 
+    public void commit(final Source source) {
+    }
+
+    public void push(final Source source) {
+    }
 }
  

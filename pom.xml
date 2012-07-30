@@ -76,7 +76,7 @@ limitations under the License.
     <ojdbc6.version>11.2.0.2</ojdbc6.version>
     <rice.version>1.0.3</rice.version>
     <servlet.version>2.5</servlet.version>
-    <slf4j.version>1.6.4</slf4j.version>
+    <slf4j.version>1.6.6</slf4j.version>
     <spring.ldap.version>1.3.1.RELEASE</spring.ldap.version>
     <struts-framework.version>1.3.10</struts-framework.version> 
     <tomcat7-maven-plugin.version>2.0-beta-1</tomcat7-maven-plugin.version>
@@ -602,6 +602,38 @@ limitations under the License.
     	    	</exclusion>
     	    </exclusions>
     	</dependency>         
+        <dependency>
+            <groupId>org.eclipse.jgit</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+            <version>${org.eclipse.jgit.version}</version>
+        </dependency>
+        
+        <!-- commons-logging implementation, commons-logging calls will go to slf4j -->
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>jcl-over-slf4j</artifactId>
+		    <version>${slf4j.version}</version>
+		</dependency>
+		
+		<!-- jul bridge, jul calls will go to slf4j -->
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>jul-to-slf4j</artifactId>
+		    <version>${slf4j.version}</version>
+		</dependency>
+		
+		<!-- binding forwards slf4j calls to log4j (should only contain a single binder) -->
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-log4j12</artifactId>
+		    <version>${slf4j.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>slf4j-api</artifactId>
+		    <version>${slf4j.version}</version>
+		</dependency>
     </dependencies>
   </dependencyManagement>
   
@@ -692,11 +724,6 @@ limitations under the License.
             <groupId>org.apache.directory.server</groupId>
             <artifactId>apacheds-all</artifactId>
             <version>${apachedsVersion}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.eclipse.jgit</groupId>
-            <artifactId>org.eclipse.jgit</artifactId>
-            <version>${org.eclipse.jgit.version}</version>
           </dependency>
         </dependencies>
       </dependencyManagement>
