@@ -19,6 +19,8 @@ import java.util.List;
 
 import org.kualigan.kfs.module.live.businessobject.Source;
 
+import org.apache.maven.scm.provider.git.gitexe.command.list.GitListCommand;
+
 /**
  * 
  * @author Leo Przybylski (leo [at] rsmart.com)
