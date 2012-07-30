@@ -19,19 +19,45 @@ import java.util.List;
 
 import org.kualigan.kfs.module.live.businessobject.Source;
 
-import org.apache.maven.scm.provider.git.gitexe.command.list.GitListCommand;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.FileMode;
+import org.eclipse.jgit.treewalk.AbstractTreeIterator;
+import org.eclipse.jgit.treewalk.TreeWalk;
 
 /**
  * 
  * @author Leo Przybylski (leo [at] rsmart.com)
  */
 public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.SourceService {
+
     /**
      * @see org.kualigan.kfs.module.live.businessobject.Source;
      * @see org.kualigan.kfs.module.live.service.SourceService;
      */
     public List<Source> listSources() {
+		final TreeWalk walk = new TreeWalk(db);
+		walk.setRecursive(recursive);
+		walk.addTree(tree);
+
+		while (walk.next()) {
+			final FileMode mode = walk.getFileMode(0);
+			if (mode == FileMode.TREE)
+				out.print('0');
+			out.print(mode);
+			out.print(' ');
+			out.print(Constants.typeString(mode.getObjectType()));
+
+			out.print(' ');
+			out.print(walk.getObjectId(0).name());
+
+			out.print('\t');
+			out.print(walk.getPathString());
+			out.println();
+		}
+
         return null;
     }
+
+    public 
 }
  
