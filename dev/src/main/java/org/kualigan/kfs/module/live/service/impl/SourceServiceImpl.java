@@ -26,6 +26,7 @@ import org.eclipse.jgit.lib.FileMode;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.AbstractTreeIterator;
+import org.eclipse.jgit.treewalk.FileTreeIterator;
 import org.eclipse.jgit.treewalk.TreeWalk;
 
 import static org.kualigan.kfs.logging.SimpleLogger.*;
@@ -48,25 +49,23 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
               .findGitDir() 
               .build();
         final TreeWalk walk = new TreeWalk(repository);
-/*
-		walk.setRecursive(recursive);
-		walk.addTree(tree);
+		walk.setRecursive(true);
+		walk.addTree(new FileTreeIterator(repository));
 		while (walk.next()) {
 			final FileMode mode = walk.getFileMode(0);
 			if (mode == FileMode.TREE)
-				out.print('0');
-			out.print(mode);
-			out.print(' ');
-			out.print(Constants.typeString(mode.getObjectType()));
+				System.out.print('0');
+			System.out.print(mode);
+			System.out.print(' ');
+			System.out.print(Constants.typeString(mode.getObjectType()));
 
-			out.print(' ');
-			out.print(walk.getObjectId(0).name());
+			System.out.print(' ');
+			System.out.print(walk.getObjectId(0).name());
 
-			out.print('\t');
-			out.print(walk.getPathString());
-			out.println();
+			System.out.print('\t');
+			System.out.print(walk.getPathString());
+			System.out.println();
 		}
-*/
         return null;
     }
 
