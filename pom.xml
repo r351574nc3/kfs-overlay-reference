@@ -35,23 +35,23 @@ limitations under the License.
     </license>
   </licenses>
   
-  <developers>
-    <developer>
-      <id>leo</id>
-      <name>Leo Przybylski</name>
-      <email>leo@rsmart.com</email>
-      <url>http://kualigan.blogspot.com</url>
-      <organization>rsmart</organization>
-      <organizationUrl>http://www.rsmart.com</organizationUrl>
-      <roles>
-        <role>developer</role>
-      </roles>
-      <timezone>-7</timezone>
-      <properties>
-        <picUrl>http://www.gravatar.com/avatar/6be04114e185b6fa626a0ee530db34e4.png</picUrl>
-      </properties>
-    </developer>
-  </developers>
+    <developers>
+        <developer>
+            <id>leo</id>
+            <name>Leo Przybylski</name>
+            <email>leo@rsmart.com</email>
+            <url>http://kualigan.blogspot.com</url>
+            <organization>rsmart</organization>
+            <organizationUrl>http://www.rsmart.com</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-7</timezone>
+            <properties>
+                <picUrl>http://www.gravatar.com/avatar/6be04114e185b6fa626a0ee530db34e4.png</picUrl>
+            </properties>
+        </developer>
+    </developers>
   
   <ciManagement>
     <url>http://jenkins.leosandbox.org</url>

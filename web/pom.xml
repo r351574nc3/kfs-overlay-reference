@@ -40,7 +40,6 @@ limitations under the License.
 
   <build>
     <finalName>${project.parent.artifactId}-${environment}</finalName>
-    <directory>src/main/webapp/WEB-INF/</directory>
 
     <resources>
       <resource>

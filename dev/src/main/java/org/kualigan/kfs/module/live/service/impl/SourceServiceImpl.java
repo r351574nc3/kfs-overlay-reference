@@ -18,9 +18,11 @@ package org.kualigan.kfs.module.live.service.impl;
 import java.io.File;
 
 import java.util.List;
+import java.util.Set;
 
 import org.kualigan.kfs.module.live.businessobject.Source;
 
+import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.FileMode;
 import org.eclipse.jgit.lib.Repository;
@@ -41,17 +43,25 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
      * @see org.kualigan.kfs.module.live.businessobject.Source;
      * @see org.kualigan.kfs.module.live.service.SourceService;
      */
-    public List<Source> listSources() throws Exception {
+    public List<Source> listSources() throws Exception {        
         final String repodir = System.getProperty("user.dir"); 
+        infof("Creating repository at %s", repodir);
         final FileRepositoryBuilder builder = new FileRepositoryBuilder();
-        final Repository repository = builder.setGitDir(new File(repodir))
+        final Repository repository = builder.setGitDir(new File(repodir + File.separator + ".git"))
               .readEnvironment() 
               .findGitDir() 
               .build();
+        final Set<String> untrackedFiles = getUntrackedFiles(repository);
+        
+        infof("Got untracked files %s", untrackedFiles);
         final TreeWalk walk = new TreeWalk(repository);
 		walk.setRecursive(true);
 		walk.addTree(new FileTreeIterator(repository));
+        
 		while (walk.next()) {
+            if (untrackedFiles.contains(walk.getPathString())) {
+                continue;
+            }
 			final FileMode mode = walk.getFileMode(0);
 			if (mode == FileMode.TREE)
 				System.out.print('0');
@@ -67,6 +77,12 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
 			System.out.println();
 		}
         return null;
+    }
+    
+    protected Set<String> getUntrackedFiles(final Repository repo) throws Exception {
+        final Git git = new Git(repo);
+        
+        return git.status().call().getUntracked();
     }
 
     public void commit(final Source source) {
