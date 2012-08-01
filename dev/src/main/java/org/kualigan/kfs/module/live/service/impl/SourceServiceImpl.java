@@ -17,6 +17,7 @@ package org.kualigan.kfs.module.live.service.impl;
 
 import java.io.File;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -44,6 +45,7 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
      * @see org.kualigan.kfs.module.live.service.SourceService;
      */
     public List<Source> listSources() throws Exception {        
+        final List<Source> retval = new LinkedList<Source>();
         final String repodir = System.getProperty("user.dir"); 
         infof("Creating repository at %s", repodir);
         final FileRepositoryBuilder builder = new FileRepositoryBuilder();
@@ -63,20 +65,9 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
                 continue;
             }
 			final FileMode mode = walk.getFileMode(0);
-			if (mode == FileMode.TREE)
-				System.out.print('0');
-			System.out.print(mode);
-			System.out.print(' ');
-			System.out.print(Constants.typeString(mode.getObjectType()));
-
-			System.out.print(' ');
-			System.out.print(walk.getObjectId(0).name());
-
-			System.out.print('\t');
-			System.out.print(walk.getPathString());
-			System.out.println();
+            retval.add(newSource(walk.getObjectId(0).name(), walk.getPathString()));
 		}
-        return null;
+        return retval;
     }
     
     protected Set<String> getUntrackedFiles(final Repository repo) throws Exception {
@@ -89,6 +80,19 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
     }
 
     public void push(final Source source) {
+    }
+    
+    public Source newSource(final String objectId, final String path) {
+        final SourceBuilder builder = getSourceBuilderFactory().getInstance(path.substring(path.getLastIndexOf(".") + 1);
+        return builder.newInstance(objectId, path);
+    }
+    
+    public SourceBuilderFactory getSourceBuilderFactory() {
+        return this.sourceBuilderFactory;
+    }
+    
+    public void setSourceBuilderFactory(final SourceBuilderFactory sourceBuilderFactory) {
+        this.sourceBuilderFactory = sourceBuilderFactory;
     }
 }
  

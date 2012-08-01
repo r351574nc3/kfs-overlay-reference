@@ -14,46 +14,12 @@
  * limitations under the License.
  */
 package org.kualigan.kfs.module.live.businessobject;
- 
- 
+
 /**
+ * Interface for source builders
+ * 
  * @author Leo Przybylski (leo [at] rsmart.com)
  */
-public interface Source extends java.io.Serializable {
-    
-     /**
-      * Absolute path of the source
-      * 
-      * @return String
-      */
-     String getPath();
-     
-     void setPath(String);
-     
-     /**
-      * VCS Identifier
-      * 
-      * @return String
-      */
-     String getId();
-     
-     void setId(String);
-     
-     /**
-      * The source type
-      * 
-      * @return String
-      */
-     String getType();
-     
-     void setType(String);
-     
-     /**
-      * File extension of the source
-      * 
-      * @return String
-      */
-     String getExtension();
-     
-     void setExtension(String);
- }
+public interface SourceBuilder {
+    Source newInstance(String, String)
+}
