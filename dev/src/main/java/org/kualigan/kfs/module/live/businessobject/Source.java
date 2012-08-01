@@ -19,41 +19,61 @@ package org.kualigan.kfs.module.live.businessobject;
 /**
  * @author Leo Przybylski (leo [at] rsmart.com)
  */
-public interface Source extends java.io.Serializable {
-    
+public class Source implements java.io.Serializable {
+
+    private String path;
+    private String id;
+    private String extension;
+    private String type;
+
      /**
       * Absolute path of the source
       * 
       * @return String
       */
-     String getPath();
+     public String getPath() {
+         return this.path;
+     }
      
-     void setPath(String);
+     public void setPath(final String path) {
+         this.path = path;
+     }
      
      /**
       * VCS Identifier
       * 
       * @return String
       */
-     String getId();
+     public String getId() {
+         return this.id;
+     }
      
-     void setId(String);
+     public void setId(final String id) {
+         this.id = id;
+     }
      
      /**
       * The source type
       * 
       * @return String
       */
-     String getType();
+     public String getType() {
+         return this.type;
+     }
      
-     void setType(String);
-     
+     public void setType(final String type) {
+        this.type = type;
+     }
      /**
       * File extension of the source
       * 
       * @return String
       */
-     String getExtension();
+     public String getExtension() {
+        return this.extension;
+     }
      
-     void setExtension(String);
+     public void setExtension(final String extension) {
+         this.extension = extension;
+     }
  }

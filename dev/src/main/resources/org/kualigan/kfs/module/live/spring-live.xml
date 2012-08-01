@@ -46,5 +46,18 @@
     </bean>
     
     <bean id="sourceService" class="org.kualigan.kfs.module.live.service.impl.SourceServiceImpl">
+        <property name="sourceBuilderFactory" ref="sourceBuilderFactory" />
     </bean>
+    
+    <bean id="sourceBuilderFactory" class="org.kualigan.kfs.module.live.service.impl.SourceBuilderFactory">
+        <property name="builders">
+            <map>
+                <entry key="java" ref="javaSourceBuilder" />
+                <entry key="xml"  ref="xmlSourceBuilder" />
+            </map>
+        </property>
+    </bean>
+    
+    <bean id="javaSourceBuilder" class="org.kualigan.kfs.module.live.businessobject.JavaSourceBuilder" />
+    <bean id="xmlSourceBuilder" class="org.kualigan.kfs.module.live.businessobject.XmlSourceBuilder" />
 </beans>

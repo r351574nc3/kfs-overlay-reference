@@ -21,5 +21,11 @@ package org.kualigan.kfs.module.live.businessobject;
  * @author Leo Przybylski (leo [at] rsmart.com)
  */
 public interface SourceBuilder {
-    Source newInstance(String, String)
+    /**
+     * Return a builder capable of creating {@link Source} instances via the given
+     * objectId and path.
+     * 
+     * @return the Source instance
+     */
+    Source newInstance(String objectId, String path);
 }

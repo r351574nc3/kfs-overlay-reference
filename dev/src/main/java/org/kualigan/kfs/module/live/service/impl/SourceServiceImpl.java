@@ -83,7 +83,8 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
     }
     
     public Source newSource(final String objectId, final String path) {
-        final SourceBuilder builder = getSourceBuilderFactory().getInstance(path.substring(path.getLastIndexOf(".") + 1);
+        final SourceBuilder builder = getSourceBuilderFactory()
+            .getInstance(path.substring(path.getLastIndexOf(".") + 1));
         return builder.newInstance(objectId, path);
     }
     

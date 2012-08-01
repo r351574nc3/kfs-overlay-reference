@@ -29,6 +29,10 @@ public class XmlSourceBuilder implements SourceBuilder {
      */
     public Source newInstance(final String objectId, final String path) {
         final Source retval = new Source();
-        source.setObjectId
+        source.setObjectId(objectId);
+        source.setPath(path);
+        source.setType("xml");
+        source.setExtension("xml");
+        return retval;
     }
 }
