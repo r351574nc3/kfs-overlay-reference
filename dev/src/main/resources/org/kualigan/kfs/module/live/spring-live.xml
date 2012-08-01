@@ -52,8 +52,8 @@
     <bean id="sourceBuilderFactory" class="org.kualigan.kfs.module.live.service.impl.SourceBuilderFactory">
         <property name="builders">
             <map>
-                <entry key="java" ref="javaSourceBuilder" />
-                <entry key="xml"  ref="xmlSourceBuilder" />
+                <entry key="java" value-ref="javaSourceBuilder" />
+                <entry key="xml"  value-ref="xmlSourceBuilder" />
             </map>
         </property>
     </bean>

@@ -47,7 +47,9 @@ public class SourceAction extends  KualiTransactionalDocumentActionBase {
         final ActionForward retval = super.docHandler(mapping, form, request, response);
                 
         infof("Source Service %s", getSourceService());
-        getSourceService().listSources();
+
+        final SourceForm sf = (SourceForm) form;
+        sf.setSources(getSourceService().listSources());
         
         return retval;
     }

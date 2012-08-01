@@ -68,7 +68,12 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
                 continue;
             }
 			final FileMode mode = walk.getFileMode(0);
-            retval.add(newSource(walk.getObjectId(0).name(), walk.getPathString()));
+            try {
+                retval.add(newSource(walk.getObjectId(0).name(), walk.getPathString()));
+            }
+            catch (Exception e) {
+                warnf(e.getMessage());
+            }
 		}
         return retval;
     }
@@ -85,7 +90,7 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
     public void push(final Source source) {
     }
     
-    public Source newSource(final String objectId, final String path) {
+    public Source newSource(final String objectId, final String path) throws Exception {
         final SourceBuilder builder = getSourceBuilderFactory().getInstance(path.substring(path.lastIndexOf(".") + 1));
         return builder.newInstance(objectId, path);
     }
