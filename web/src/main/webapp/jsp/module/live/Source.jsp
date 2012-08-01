@@ -43,6 +43,24 @@
         </style>
         <link href="css/bootstrap-responsive.css" rel="stylesheet">
         <script src="scripts/module/live/source.js" type="text/javascript" charset="utf-8"></script>
+        <script src="assets/js/jquery.js"></script>
+        <script src="assets/js/google-code-prettify/prettify.js"></script>
+        <script src="assets/js/bootstrap-transition.js"></script>
+        <script src="assets/js/bootstrap-alert.js"></script>
+        <script src="assets/js/bootstrap-modal.js"></script>
+        <script src="assets/js/bootstrap-dropdown.js"></script>
+        <script src="assets/js/bootstrap-scrollspy.js"></script>
+        <script src="assets/js/bootstrap-tab.js"></script>
+        <script src="assets/js/bootstrap-tooltip.js"></script>
+        <script src="assets/js/bootstrap-popover.js"></script>
+        <script src="assets/js/bootstrap-button.js"></script>
+        <script src="assets/js/bootstrap-collapse.js"></script>
+        <script src="assets/js/bootstrap-carousel.js"></script>
+        <script src="assets/js/bootstrap-typeahead.js"></script>
+        <script src="assets/js/application.js"></script>
+        <script>
+            $(".collapse").collapse();
+        </script>
         
     </head>
     <body>
@@ -77,15 +95,52 @@
           <li class="active">Data</li>
         </ul>
 
-        <div id="outer-editor" class="table-bordered bubble" style="height: 480px; margin: 10 10 10 10">
-            <div id="editor">some text</div>
-            <script src="scripts/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-            <script src="scripts/ace/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
-        
-            <script>
-                var editor = ace.edit("editor");
-                editor.setTheme("ace/theme/twilight");
-            </script>
-        </div>
+        <div class="accordion" id="accordion2">
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                  Collapsible Group Item #1
+                </a>
+              </div>
+              <div id="collapseOne" class="accordion-body collapse in">
+                <div class="accordion-inner">
+                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                  Collapsible Group Item #2
+                </a>
+              </div>
+              <div id="collapseTwo" class="accordion-body collapse">
+                <div class="accordion-inner">
+                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                </div>
+              </div>
+            </div>
+            <div class="accordion-group">
+              <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+                  Collapsible Group Item #3
+                </a>
+              </div>
+              <div id="collapseThree" class="accordion-body collapse">
+                <div class="accordion-inner">            
+                    <div id="outer-editor" class="table-bordered bubble" style="height: 480px; margin: 10 10 10 10">
+                        <div id="editor">some text</div>
+                        <script src="scripts/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+                        <script src="scripts/ace/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
+                    
+                        <script>
+                            var editor = ace.edit("editor");
+                            editor.setTheme("ace/theme/twilight");
+                        </script>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
     </body>
 </html>
