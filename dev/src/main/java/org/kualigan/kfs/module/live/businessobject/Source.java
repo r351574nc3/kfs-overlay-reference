@@ -25,6 +25,9 @@ public class Source implements java.io.Serializable {
     private String id;
     private String extension;
     private String type;
+    
+    public Source() {
+    }
 
      /**
       * Absolute path of the source

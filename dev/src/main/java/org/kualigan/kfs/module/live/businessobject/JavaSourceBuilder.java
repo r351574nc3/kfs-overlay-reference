@@ -28,10 +28,10 @@ public class JavaSourceBuilder implements SourceBuilder {
      */
     public Source newInstance(final String objectId, final String path) {
         final Source retval = new Source();
-        source.setId(objectId);
-        source.setPath(path);
-        source.setType("java");
-        source.setExtension("java");
+        retval.setId(objectId);
+        retval.setPath(path);
+        retval.setType("java");
+        retval.setExtension("java");
         return retval;
     }
 }

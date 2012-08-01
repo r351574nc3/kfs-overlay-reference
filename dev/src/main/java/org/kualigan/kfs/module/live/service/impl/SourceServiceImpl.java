@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.kualigan.kfs.module.live.businessobject.Source;
+import org.kualigan.kfs.module.live.businessobject.SourceBuilder;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Constants;
@@ -39,6 +40,8 @@ import static org.kualigan.kfs.logging.SimpleLogger.*;
  * @author Leo Przybylski (leo [at] rsmart.com)
  */
 public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.SourceService {
+    
+    private SourceBuilderFactory sourceBuilderFactory;
 
     /**
      * @see org.kualigan.kfs.module.live.businessobject.Source;
@@ -83,8 +86,7 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
     }
     
     public Source newSource(final String objectId, final String path) {
-        final SourceBuilder builder = getSourceBuilderFactory()
-            .getInstance(path.substring(path.getLastIndexOf(".") + 1));
+        final SourceBuilder builder = getSourceBuilderFactory().getInstance(path.substring(path.lastIndexOf(".") + 1));
         return builder.newInstance(objectId, path);
     }
     
