@@ -23,6 +23,7 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -86,22 +87,63 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
 		}
         return retval;
     }
+    
+    protected List<String> listSourcePaths() throws Exception {
+        final List<String> retval = new LinkedList<String>();
+        final String repodir = System.getProperty("user.dir"); 
+        infof("Creating repository at %s", repodir);
+        final FileRepositoryBuilder builder = new FileRepositoryBuilder();
+        final Repository repository = builder.setGitDir(new File(repodir + File.separator + ".git"))
+              .readEnvironment() 
+              .findGitDir() 
+              .build();
+        final Set<String> untrackedFiles = getUntrackedFiles(repository);
+        
+        final TreeWalk walk = new TreeWalk(repository);
+    	walk.setRecursive(true);
+		walk.addTree(new FileTreeIterator(repository));
+        
+		while (walk.next()) {
+            if (untrackedFiles.contains(walk.getPathString())) {
+                continue;
+            }
+			final FileMode mode = walk.getFileMode(0);
+            try {
+                retval.add(walk.getPathString());
+            }
+            catch (Exception e) {
+                warnf(e.getMessage());
+            }
+		}
+        return retval;
+    }
 
     /**
      * 
      * 
-     * @return List of {@link Source} instances directly in the current path.
+     * @return {@link Set} of {@link Source} instances directly in the current path.
      */
-    public List<Source> listSources(final String pathStr) throws Exception {
-        final List<Source> retval = new LinkedList<Source>();
-        final Path path = FileSystems.getDefault().getPath(pathStr);
-
-        final DirectoryStream<Path> stream = Files.newDirectoryStream(path);
-        for (final Path dir : stream) {
-            final String dirName = dir.toString();
-            infof("Adding %s", dirName);
-            if (!dirName.equals("/")) {
-                retval.add(newSource(getObjectId(dirName).name(), dirName + File.separator));
+    public Set<Source> sources(final String pathStr) throws Exception {
+        final List<String> paths  = listSourcePaths();
+        final Set<Source> retval = new HashSet<Source>();
+        infof("Listing sources for %s", pathStr);
+        
+        for (final String p : paths) {
+            if (p.startsWith(pathStr)) {
+                final String relative = p.substring(pathStr.length());
+                if (relative.indexOf(File.separator) > -1) {
+                    final String dirName = relative.substring(0, relative.indexOf(File.separator));
+                    infof("Adding dir %s", dirName);
+                    retval.add(newSource(null, dirName + File.separator));
+                }
+            }
+            else if (pathStr.equals("") || pathStr.equals(".")) {
+                infof("At root");
+                if (p.indexOf(File.separator) > -1) {
+                    final String dirName = p.substring(0, p.indexOf(File.separator));
+                    infof("Adding dir %s", dirName);
+                    retval.add(newSource(null, dirName + File.separator));
+                }
             }
         }
         
@@ -116,7 +158,6 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
      */
     protected ObjectId getObjectId(final String path) throws Exception {
         final String repodir = System.getProperty("user.dir"); 
-        infof("Creating repository at %s", repodir);
         final FileRepositoryBuilder builder = new FileRepositoryBuilder();
         final Repository repository = builder.setGitDir(new File(repodir + File.separator + ".git"))
               .readEnvironment() 
@@ -127,7 +168,7 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
         final RevTree tree = new RevWalk(repository).parseCommit(lastCommitId).getTree();
 
         infof("Getting object id for %s", path);
-        return TreeWalk.forPath(repository, path, tree).getObjectId(0);
+        return TreeWalk.forPath(repository, path, tree) == null ? null : TreeWalk.forPath(repository, path, tree).getObjectId(0);
     }
     
     protected Set<String> getUntrackedFiles(final Repository repo) throws Exception {

@@ -48,9 +48,9 @@ public class SourceAction extends  KualiTransactionalDocumentActionBase {
                 
         final SourceForm sf = (SourceForm) form;
         
-        final String path = request.getAttribute("path") != null ? (String) request.getAttribute("path") : "/";
+        final String path = request.getAttribute("path") != null ? (String) request.getAttribute("path") : ".";
 
-        sf.setSources(getSourceService().listSources(path));
+        sf.setSources(getSourceService().sources(path));
 
         
         return retval;

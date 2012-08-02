@@ -16,6 +16,7 @@
 package org.kualigan.kfs.module.live.service;
 
 import java.util.List;
+import java.util.Set;
 
 import org.kualigan.kfs.module.live.businessobject.Source;
 
@@ -27,6 +28,6 @@ public interface SourceService {
  
     List<Source> listSources() throws Exception;
     
-    List<Source> listSources(String path) throws Exception;
+    Set<Source> sources(String path) throws Exception;
 }
  
