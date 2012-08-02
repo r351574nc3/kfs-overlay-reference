@@ -19,20 +19,6 @@ package org.kualigan.kfs.module.live.businessobject;
  * 
  * @author Leo Przybylski (leo [at] rsmart.com)
  */
-public class JavaSourceBuilder implements SourceBuilder {
-    /**
-     * 
-     * @return Source instance for XML files
-     * @see org.kualigan.kfs.module.live.businessobject.Source
-     * @see org.kualigan.kfs.module.live.businessobject.SourceBuilder
-     */
-    public Source newInstance(final String objectId, final String path) {
-        final Source retval = new Source();
-        retval.setId(objectId);
-        
-        retval.setPath(path);        
-        retval.setType("java");
-        retval.setExtension("java");
-        return retval;
-    }
+public abstract class AbstractSourceBuilder implements SourceBuilder {
+    
 }

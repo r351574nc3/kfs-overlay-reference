@@ -54,10 +54,12 @@
             <map>
                 <entry key="java" value-ref="javaSourceBuilder" />
                 <entry key="xml"  value-ref="xmlSourceBuilder" />
+                <entry key="/"    value-ref="dirSourceBuilder" />
             </map>
         </property>
     </bean>
     
     <bean id="javaSourceBuilder" class="org.kualigan.kfs.module.live.businessobject.JavaSourceBuilder" />
     <bean id="xmlSourceBuilder" class="org.kualigan.kfs.module.live.businessobject.XmlSourceBuilder" />
+    <bean id="dirSourceBuilder" class="org.kualigan.kfs.module.live.businessobject.DirectorySourceBuilder" />
 </beans>

@@ -25,6 +25,7 @@ public class Source implements java.io.Serializable {
     private String id;
     private String extension;
     private String type;
+    private String fileName;
     
     public Source() {
     }
@@ -40,6 +41,14 @@ public class Source implements java.io.Serializable {
      
      public void setPath(final String path) {
          this.path = path;
+     }
+     
+     public void setFileName(final String fileName) {
+         this.fileName = fileName;
+     }
+     
+     public String getFileName() {
+         return this.fileName;
      }
      
      /**

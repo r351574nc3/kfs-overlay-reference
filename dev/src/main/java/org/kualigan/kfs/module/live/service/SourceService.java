@@ -26,5 +26,7 @@ import org.kualigan.kfs.module.live.businessobject.Source;
 public interface SourceService {
  
     List<Source> listSources() throws Exception;
+    
+    List<Source> listSources(String path) throws Exception;
 }
  

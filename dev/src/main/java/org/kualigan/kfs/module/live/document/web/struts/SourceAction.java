@@ -49,7 +49,7 @@ public class SourceAction extends  KualiTransactionalDocumentActionBase {
         infof("Source Service %s", getSourceService());
 
         final SourceForm sf = (SourceForm) form;
-        sf.setSources(getSourceService().listSources());
+        sf.setSources(getSourceService().listSources("."));
         
         return retval;
     }

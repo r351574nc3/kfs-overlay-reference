@@ -15,11 +15,12 @@
  */
 package org.kualigan.kfs.module.live.businessobject;
 
+
 /**
  * 
  * @author Leo Przybylski (leo [at] rsmart.com)
  */
-public class JavaSourceBuilder implements SourceBuilder {
+public class DirectorySourceBuilder implements SourceBuilder {
     /**
      * 
      * @return Source instance for XML files
@@ -29,10 +30,10 @@ public class JavaSourceBuilder implements SourceBuilder {
     public Source newInstance(final String objectId, final String path) {
         final Source retval = new Source();
         retval.setId(objectId);
-        
-        retval.setPath(path);        
-        retval.setType("java");
-        retval.setExtension("java");
+        retval.setPath(path);
+        retval.setType("directory");
+        retval.setExtension("/");
         return retval;
     }
+
 }

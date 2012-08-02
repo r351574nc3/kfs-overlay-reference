@@ -89,9 +89,21 @@ public class KualiDWRServlet extends DWRServlet {
     				try {
 						InputStream is = resourceLoader.getResource(classpathResourcePrefix + scriptConfigurationFilePath).getInputStream();
 						configuration.addConfig(is);
-					} catch (Exception e) {
-						throw new ServletException(e);
-					}
+					} 
+                    catch (Exception e) {
+            			try {
+    						InputStream is = resourceLoader.getResource(scriptConfigurationFilePath).getInputStream();
+    						configuration.addConfig(is);
+    					} 
+                        catch (Exception e3) {
+                            try {
+                                super.readFile(classpathResourcePrefix + scriptConfigurationFilePath, configuration);
+                            }
+                            catch (Exception e2) {
+    						    throw new ServletException(e2);
+                            }
+    					}
+                    }
 				}
 			}	
 		}

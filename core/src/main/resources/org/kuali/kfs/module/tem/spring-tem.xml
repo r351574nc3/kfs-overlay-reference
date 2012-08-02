@@ -38,7 +38,7 @@
 		</property>
 		<property name="scriptConfigurationFilePaths">
 			<list>
-				<value>org/kuali/kfs/module/tem/dwr-tem.xml</value>
+				<value>org/kualigan/kfs/module/live/dwr-live.xml</value>
 			</list>
 		</property>
 		<property name="databaseRepositoryFilePaths">
