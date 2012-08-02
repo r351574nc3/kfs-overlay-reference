@@ -93,16 +93,17 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
         final FileSystem fs = FileSystems.getDefault();
 
         for (final Path dir : fs.getRootDirectories()) {
-            final String dirName = dir.getFileName().toString();
+            final String dirName = dir.toString();
             retval.add(newSource(getObjectId(dirName).name(), dirName + File.separator));
         }
 
         return retval;
     }
 
-    
     /**
+     * Lookup the GIT {@link ObjectId} for a given file by its path.
      * 
+     * @param path of a file to lookup 
      * @return ObjectId
      */
     protected ObjectId getObjectId(final String path) throws Exception {
