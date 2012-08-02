@@ -88,4 +88,19 @@ public class Source implements java.io.Serializable {
      public void setExtension(final String extension) {
          this.extension = extension;
      }
+     
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof Source) {
+            return getPath().equals(((Source) obj).getPath());
+        }
+        
+        return false;
+    }
+    
+    public int hashCode() {
+        return getPath().hashCode();
+    }
  }

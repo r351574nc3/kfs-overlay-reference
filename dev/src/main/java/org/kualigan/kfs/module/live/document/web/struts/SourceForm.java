@@ -16,6 +16,7 @@
 package org.kualigan.kfs.module.live.document.web.struts;
 
 import java.util.List;
+import java.util.Set;
 
 import org.kuali.rice.kns.web.struts.form.KualiTransactionalDocumentFormBase;
 
@@ -28,10 +29,12 @@ import org.kuali.rice.kns.service.DocumentService;
 
 /**
  *
+ * @author Leo Przybylski (leo [at] rsmart.com)
  */
 public class SourceForm extends KualiTransactionalDocumentFormBase {
     private static final long serialVersionUID = 1L;
-    private List<Source> sources;
+    private Set<Source> sources;
+    private String path;
 
     /**
      * Constructs a TransferOfFundsForm instance and sets up the appropriately casted document.
@@ -40,12 +43,20 @@ public class SourceForm extends KualiTransactionalDocumentFormBase {
         super();
     }
     
-    public void setSources(final List<Source> sources) {
+    public void setSources(final Set<Source> sources) {
         this.sources = sources;
     }
     
-    public List<Source> getSources() {
+    public Set<Source> getSources() {
         return this.sources;
+    }
+    
+    public void setPath(final String path) {
+        this.path = path;
+    }
+    
+    public String getPath() {
+        return this.path;
     }
 
     @Override

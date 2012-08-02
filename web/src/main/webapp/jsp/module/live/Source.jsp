@@ -87,13 +87,16 @@
         </div>
 
         <ul class="breadcrumb">
-          <li>
-            <a href="#">Home</a> <span class="divider">/</span>
-          </li>
-          <li>
-            <a href="#">Library</a> <span class="divider">/</span>
-          </li>
-          <li class="active">Data</li>
+            <c:forTokens items="${param.path}" delims="/" varStatus="status" var="path">
+            <c:choose>
+            <c:when test="${status.index == status.count - 1}">
+            <li class="active">${path}</li>
+            </c:when>
+            <c:otherwise>
+            <li><a href="#">${path}</a> <span class="divider">/</span></li>
+            </c:otherwise>
+            </c:choose>
+            </c:forTokens>
         </ul>
 
         <div class="accordion" id="accordion2">
