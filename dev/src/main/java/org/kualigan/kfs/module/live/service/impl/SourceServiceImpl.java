@@ -91,7 +91,7 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
 
     private SourceBuilderFactory sourceBuilderFactory;
     
-    protected String convertLessThanOneThousand(final int number) {
+    protected String convertLessThanOneThousand(int number) {
         String soFar;
         
         if (number % 100 < 20){
