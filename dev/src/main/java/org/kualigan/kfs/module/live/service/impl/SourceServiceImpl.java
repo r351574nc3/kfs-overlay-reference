@@ -258,7 +258,8 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
         
         for (final String p : paths) {
             if (p.startsWith(pathStr)) {
-                final String relative = p.substring(pathStr.length());
+                final int offset = pathStr.endsWith(File.separator) ? 0 : 1;
+                final String relative = p.substring(pathStr.length() + offset);
                 if (relative.indexOf(File.separator) > -1) {
                     final String dirName = relative.substring(0, relative.indexOf(File.separator));
                     infof("Adding dir %s", dirName);
@@ -266,7 +267,6 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
                 }
             }
             else if (pathStr.equals("") || pathStr.equals(".")) {
-                infof("At root");
                 if (p.indexOf(File.separator) > -1) {
                     final String dirName = p.substring(0, p.indexOf(File.separator));
                     infof("Adding dir %s", dirName);

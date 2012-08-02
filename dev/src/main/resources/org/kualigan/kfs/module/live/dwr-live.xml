@@ -22,7 +22,8 @@
 	<allow>
 	    <create creator="spring" javascript="SourceService">
 	    	<param name="beanName" value="sourceService" />
-	    	<include method="listSources" />
+        	<include method="listSources" />
+        	<include method="sources" />
 	    </create>
 	</allow>	
 </dwr>
