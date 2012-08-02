@@ -127,7 +127,7 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
         final RevTree tree = new RevWalk(repository).parseCommit(lastCommitId).getTree();
 
         infof("Getting object id for %s", path);
-        final TreeWalk tree = TreeWalk.forPath(repository, path, tree;
+        final TreeWalk tree = TreeWalk.forPath(repository, path, tree);
         
         return tree.getObjectId(0);
     }
