@@ -17,6 +17,8 @@ package org.kualigan.kfs.module.live.service.impl;
 
 import java.io.File;
 
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -34,6 +36,8 @@ import org.eclipse.jgit.lib.FileMode;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.revwalk.RevTree;
+import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.AbstractTreeIterator;
 import org.eclipse.jgit.treewalk.FileTreeIterator;
 import org.eclipse.jgit.treewalk.TreeWalk;
@@ -88,15 +92,19 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
      * 
      * @return List of {@link Source} instances directly in the current path.
      */
-    public List<Source> listSources(final String path) throws Exception {
+    public List<Source> listSources(final String pathStr) throws Exception {
         final List<Source> retval = new LinkedList<Source>();
-        final FileSystem fs = FileSystems.getDefault();
+        final Path path = FileSystems.getDefault().getPath(pathStr);
 
-        for (final Path dir : fs.getRootDirectories()) {
+        final DirectoryStream<Path> stream = Files.newDirectoryStream(path);
+        for (final Path dir : stream) {
             final String dirName = dir.toString();
-            retval.add(newSource(getObjectId(dirName).name(), dirName + File.separator));
+            infof("Adding %s", dirName);
+            if (!dirName.equals("/")) {
+                retval.add(newSource(getObjectId(dirName).name(), dirName + File.separator));
+            }
         }
-
+        
         return retval;
     }
 
@@ -115,7 +123,11 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
               .findGitDir() 
               .build();
         final ObjectId lastCommitId = repository.resolve(HEAD);
-        final TreeWalk tree = TreeWalk.forPath(repository, path, lastCommitId);
+        
+        final RevTree tree = new RevWalk(repository).parseCommit(lastCommitId).getTree();
+
+        infof("Getting object id for %s", path);
+        final TreeWalk tree = TreeWalk.forPath(repository, path, tree;
         
         return tree.getObjectId(0);
     }
