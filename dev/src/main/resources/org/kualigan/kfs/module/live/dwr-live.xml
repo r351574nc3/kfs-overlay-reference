@@ -24,6 +24,7 @@
 	    	<param name="beanName" value="sourceService" />
         	<include method="listSources" />
         	<include method="sources" />
+            <convert converter="bean" match="org.kualigan.kfs.module.live.businessobject.Source"/>
 	    </create>
 	</allow>	
 </dwr>

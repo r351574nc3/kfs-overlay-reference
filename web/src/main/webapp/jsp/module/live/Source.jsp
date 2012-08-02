@@ -58,11 +58,25 @@
         <script src="assets/js/bootstrap-carousel.js"></script>
         <script src="assets/js/bootstrap-typeahead.js"></script>
         <script src="assets/js/application.js"></script>
-        <script src="dwr/interface/SourceService.js" />
+        <script language="JavaScript" type="text/javascript" src="/kfs-tem/dwr/engine.js"></script>
+        <script language="JavaScript" type="text/javascript" src="dwr/util.js"></script>
+        <script src="dwr/interface/SourceService.js"></script>
         <script>
             $(".collapse").collapse();
+
+            $('#slider a').click(function() {
+                history.pushState({ path: this.path }, '', this.href)
+                $.get(this.href, function(data) {
+                    $('#slider').slideTo(data)      
+                })
+              return false  
+            })
+    
+            SourceService.sources('core', function(response) {
+                    alert(response)
+                });
+            
         </script>
-        
     </head>
     <body>
     
@@ -86,14 +100,15 @@
           </div>
         </div>
 
+        <div id="slider">
         <ul class="breadcrumb">
             <c:forTokens items="${param.path}" delims="/" varStatus="status" var="path">
             <c:choose>
-            <c:when test="${status.index == status.count - 1}">
-            <li class="active">${path}</li>
+            <c:when test="${not status.last}">
+            <li><a href="#">${path}</a> <span class="divider">/</span></li>
             </c:when>
             <c:otherwise>
-            <li><a href="#">${path}</a> <span class="divider">/</span></li>
+            <li class="active">${path}</li>
             </c:otherwise>
             </c:choose>
             </c:forTokens>
@@ -134,5 +149,6 @@
               </div>
             </div>
           </div>
+        </div>
     </body>
 </html>
