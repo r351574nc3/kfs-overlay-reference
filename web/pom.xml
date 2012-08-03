@@ -34,6 +34,7 @@ limitations under the License.
     <env.filter>${filter.directory}/${build.environment}-build.properties</env.filter>
     <login.user>williamh</login.user>
     <default.context.path>${project.parent.artifactId}</default.context.path>
+    <jrebel.phase>none</jrebel.phase>
   </properties>
   
   
@@ -180,6 +181,42 @@ limitations under the License.
                 <classesDirectory>target/classes</classesDirectory>
             </configuration>
         </plugin>
+        <plugin>
+            <groupId>org.zeroturnaround</groupId>
+            <artifactId>jrebel-maven-plugin</artifactId>
+            <configuration>
+                <addResourcesDirToRebelXml>true</addResourcesDirToRebelXml>
+                <alwaysGenerate>true</alwaysGenerate>                
+                <packaging>war</packaging>
+                <classpath>
+                    <fallback>default</fallback>
+                    <resources>
+                        <resource>
+                            <directory>../core/target/classes</directory>
+                            <includes>
+                                <include>**/**</include>
+                            </includes>
+                        </resource>
+                        <resource>
+                            <directory>../dev/target/classes</directory>
+                            <includes>
+                                <include>**/**</include>
+                            </includes>
+                        </resource>
+                    </resources>
+                </classpath>
+                <war dir="target/kfs-tem-dev" />
+            </configuration>
+            <executions>
+                <execution>
+                    <id>generate-rebel-xml</id>
+                    <goals>
+                        <goal>generate</goal>
+                    </goals>
+                    <phase>${jrebel.phase}</phase>
+                </execution>
+            </executions>
+        </plugin>
     </plugins>
 
 
@@ -227,4 +264,18 @@ limitations under the License.
         </dependency>
 
     </dependencies>
+    
+    <profiles>
+        <profile>
+            <id>non-dev</id>
+            <activation>
+                <property>
+                    <name>build.environment</name>
+                </property>
+            </activation>
+            <properties>
+                <jrebel.phase>none</jrebel.phase>
+            </properties>
+        </profile>
+    </profiles>
 </project>

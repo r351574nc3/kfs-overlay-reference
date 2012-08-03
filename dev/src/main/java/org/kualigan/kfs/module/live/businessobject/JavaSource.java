@@ -18,5 +18,5 @@ package org.kualigan.kfs.module.live.businessobject;
 /**
  * @author Leo Przybylski (leo [at] rsmart.com)
  */ 
-public class JavaSource implements Source {
+public class JavaSource  {
 }

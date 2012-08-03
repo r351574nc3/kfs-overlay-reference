@@ -41,6 +41,7 @@
 				<value>org/kualigan/kfs/module/live/dwr-live.xml</value>
 			</list>
 		</property>
+        
 		<property name="databaseRepositoryFilePaths">
 			<list>
 				<value>org/kuali/kfs/module/tem/ojb-tem.xml</value>
