@@ -84,6 +84,7 @@
           </div>
         </div>
 
+<%--
           <div class="alert alert-block alert-error fade in">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
             <h4 class="alert-heading">Oh snap! You got an error!</h4>
@@ -92,69 +93,21 @@
               <a class="btn btn-danger" href="#">Take this action</a> <a class="btn" href="#">Or do this</a>
             </p>
           </div>
+--%>
 
-        <div id="slider">
-        <ul class="breadcrumb">
-            <c:forTokens items="${param.path}" delims="/" varStatus="status" var="path">
-            <c:choose>
-            <c:when test="${not status.last}">
-            <li><a href="#">${path}</a> <span class="divider">/</span></li>
-            </c:when>
-            <c:otherwise>
-            <li class="active">${path}</li>
-            </c:otherwise>
-            </c:choose>
-            </c:forTokens>
-        </ul>
-
-        <div class="accordion" id="accordion2">
-            <c:forEach items="${KualiForm.sources}" var="sourceItem">
-            <div class="accordion-group">
-              <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#${sourceItem.id}">${sourceItem.path}</a>
-              </div>
-              <div id="${sourceItem.id}" class="accordion-body collapse in">
-                <div class="accordion-inner">
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                </div>
-              </div>
-            </div>
-            </c:forEach>
-            <div class="accordion-group">
-              <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                  Collapsible Group Item #3
-                </a>
-              </div>
-              <div id="collapseThree" class="accordion-body collapse">
-                <div class="accordion-inner">            
-                    <div id="outer-editor" class="table-bordered bubble" style="height: 480px; margin: 10 10 10 10">
-                        <div id="editor">some text</div>
-                        <script src="scripts/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-                        <script src="scripts/ace/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
-                    
-                        <script>
-                            var editor = ace.edit("editor");
-                            editor.setTheme("ace/theme/twilight");
-                        </script>
-                    </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <c:import url="Source-slider.jsp" />
 <script>
-            function listSources(path) {
-                SourceService.sources('core', {
-                        callback:function(data) {
-                            alert(data[0].id);
-                        },
-                        errorHandler:function(errorMessage) { 
-                                window.status = errorMessage;
-                                alert(errorMessage);
-                        }
-                });
+function listSources(path) {
+    SourceService.sources('core', {
+            callback:function(data) {
+                alert(data[0].id);
+            },
+            errorHandler:function(errorMessage) { 
+                    window.status = errorMessage;
+                    alert(errorMessage);
             }
+    });
+}
 
 function slideTo(data) {
     var width = parseInt($('#slider').css('width'));
@@ -168,13 +121,14 @@ function slideTo(data) {
     });
 }
 
-            $('#slider a').click(function() {
-                history.pushState({ path: this.path }, '', this.href)
-                $.get('liveSource.do?methodToCall=docHandler&command=initiate&docTypeName=SOURCE&path=core/src/', function(data) {
-                    slideTo(data)      
-                })
-              return false  
-            })
+$('#slider a').click(function() {
+    history.pushState({ path: this.path }, '', this.href)
+    var newpath = $(this).attr("href");
+    $.get('liveSource.do?methodToCall=docHandler&command=initiate&docTypeName=SOURCE&path=' + newpath, function(data) {
+        slideTo(data)      
+    })
+  return false  
+})
 </script>
 
     <script src="scripts/modernizr.custom.48556.js" type="text/javascript"></script>
