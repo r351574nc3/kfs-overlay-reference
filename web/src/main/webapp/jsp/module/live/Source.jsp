@@ -49,15 +49,13 @@
         <script src="assets/js/bootstrap-alert.js"></script>
         <script src="assets/js/bootstrap-modal.js"></script>
         <script src="assets/js/bootstrap-dropdown.js"></script>
-        <script src="assets/js/bootstrap-scrollspy.js"></script>
         <script src="assets/js/bootstrap-tab.js"></script>
         <script src="assets/js/bootstrap-tooltip.js"></script>
         <script src="assets/js/bootstrap-popover.js"></script>
         <script src="assets/js/bootstrap-button.js"></script>
         <script src="assets/js/bootstrap-collapse.js"></script>
-        <script src="assets/js/bootstrap-carousel.js"></script>
-        <script src="assets/js/bootstrap-typeahead.js"></script>
-        <script src="assets/js/application.js"></script>
+        <script src="scripts/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src="scripts/ace/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
         <script language="JavaScript" type="text/javascript" src="/kfs-tem/dwr/engine.js"></script>
         <script language="JavaScript" type="text/javascript" src="dwr/util.js"></script>
         <script src="dwr/interface/SourceService.js"></script>
@@ -96,43 +94,6 @@
 --%>
 
     <c:import url="Source-slider.jsp" />
-<script>
-function listSources(path) {
-    SourceService.sources('core', {
-            callback:function(data) {
-                alert(data[0].id);
-            },
-            errorHandler:function(errorMessage) { 
-                    window.status = errorMessage;
-                    alert(errorMessage);
-            }
-    });
-}
 
-function slideTo(data) {
-    var width = parseInt($('#slider').css('width'));
-    var transfer = $('<div class="transfer"></div>').css({ 'width': (2 * width) + 'px' });
-    var current = $('<div class="current"></div>').css({ 'width': width + 'px', 'left': '0', 'float': 'left' }).html($('#slider').html());
-    var next = $('<div class="next"></div>').css({ 'width': width + 'px', 'left': width + 'px', 'float': 'left' }).html(data);
-    transfer.append(current).append(next);
-    $('#slider').html('').append(transfer);
-    transfer.animate({ 'margin-left': '-' + width + 'px' }, 300, function () {
-        $('#slider').html(data);
-    });
-}
-
-$('#slider a').click(function() {
-    history.pushState({ path: this.path }, '', this.href)
-    var newpath = $(this).attr("href");
-    $.get('liveSource.do?methodToCall=docHandler&command=initiate&docTypeName=SOURCE&path=' + newpath, function(data) {
-        slideTo(data)      
-    })
-  return false  
-})
-</script>
-
-    <script src="scripts/modernizr.custom.48556.js" type="text/javascript"></script>
-    
-    <script src="scripts/github.js" type="text/javascript"></script>
     </body>
 </html>

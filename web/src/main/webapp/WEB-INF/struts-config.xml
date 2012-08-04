@@ -775,7 +775,8 @@
 			scope="request" parameter="methodToCall" validate="true"
 			attribute="KualiForm">
 			<set-property property="cancellable" value="true" />
-			<forward name="basic" path="/jsp/module/live/{1}.jsp" />		
+			<forward name="slider" path="/jsp/module/live/{1}-slider.jsp" />		
+    		<forward name="basic" path="/jsp/module/live/{1}.jsp" />		
 		</action>
     </action-mappings>
 

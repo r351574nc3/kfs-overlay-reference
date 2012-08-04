@@ -52,7 +52,9 @@ public class SourceAction extends  KualiTransactionalDocumentActionBase {
 
         sf.setSources(getSourceService().sources(path));
 
-        
+        if (request.getParameter("slider") != null) {
+            return mapping.findForward("slider");
+        }
         return retval;
     }
     

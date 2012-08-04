@@ -14,8 +14,8 @@
  limitations under the License.
 --%>
 <%@ include file="/jsp/sys/kfsTldHeader.jsp"%>
-
-        <div id="slider">
+    <div id="slider row">
+        <div class="span10 offset1">
         <ul class="breadcrumb">
             <c:forTokens items="${param.path}" delims="/" varStatus="status" var="path">
             <c:choose>
@@ -28,40 +28,85 @@
             </c:choose>
             </c:forTokens>
         </ul>
+        </div>
 
-        <div class="accordion" id="accordion2">
-            <c:forEach items="${KualiForm.sources}" var="sourceItem">
-            <div class="accordion-group">
-              <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#${sourceItem.id}">${sourceItem.path}</a>
-              </div>
-              <div id="${sourceItem.id}" class="accordion-body collapse in">
-                <div class="accordion-inner">
-                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                </div>
-              </div>
-            </div>
-            </c:forEach>
-            <div class="accordion-group">
-              <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                  Collapsible Group Item #3
-                </a>
-              </div>
-              <div id="collapseThree" class="accordion-body collapse">
-                <div class="accordion-inner">            
-                    <div id="outer-editor" class="table-bordered bubble" style="height: 480px; margin: 10 10 10 10">
-                        <div id="editor">some text</div>
-                        <script src="scripts/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-                        <script src="scripts/ace/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
-                    
+  <div class="frames">
+    <div class="frame frame-center" data-path="/" data-permalink-url="/ajaxorg/ace/tree/2956f1b61f7e9801ac604fb20242111260bf261c" data-title="ajaxorg/ace · GitHub" data-type="tree" data-cached-commit-url="/ajaxorg/ace/cache/commits/2956f1b61f7e9801ac604fb20242111260bf261c?commit_sha=2956f1b61f7e9801ac604fb20242111260bf261c&amp;path=">
+      <div class="bubble tree-browser-wrapper span10 offset1">
+        <div class="accordion" id="accordion">
+        <div class="header row">
+          <div class="span2 offset1">name</div>
+          <div class="span2">age</div>
+          <div class="span3"><!--
+            <div class="history">
+              <a href="/ajaxorg/ace/commits/master/" rel="nofollow">history</a>
+            </div>-->
+            message
+          </div>
+        </div>
+
+        <c:forEach items="${KualiForm.sources}" var="sourceItem">
+        <div class="accordion-group">
+          <div class="row">
+                <div class="span1 icon"> <span class="mini-icon mini-icon-directory">&nbsp;</span> </div>
+                <div class="span2 content accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" 
+                                                data-parent="#accordion" 
+                                                href="${sourceItem.path}">${sourceItem.path}</a></div>
+                <div class="span2 age">  </div>
+                <div class="span3 message">  </div>
+          </div>
+          <div class="row">
+            <div id="${sourceItem.id}" class="span10 accordion-body collapse in">
+                <div class="accordion-inner" style="height: 480px">
+                    <div class="span10 table-bordered bubble" style="height: 100%" id="editor">some text</div>
                         <script>
                             var editor = ace.edit("editor");
                             editor.setTheme("ace/theme/twilight");
                         </script>
                     </div>
                 </div>
-              </div>
             </div>
           </div>
         </div>
+        </c:forEach>
+
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+
+function slideTo(data) {
+    var width = parseInt($('#slider').css('width'));
+    var transfer = $('<div class="transfer"></div>').css({ 'width': (2 * width) + 'px' });
+    var current = $('<div class="current"></div>').css({ 'width': width + 'px', 'left': '0', 'float': 'left' }).html($('#slider').html());
+    var next = $('<div class="next"></div>').css({ 'width': width + 'px', 'left': width + 'px', 'float': 'left' }).html(data);
+    transfer.append(current).append(next);
+    $('#slider').html('').append(transfer);
+    transfer.animate({ 'margin-left': '-' + width + 'px' }, 300, function () {
+        $('#slider').html(data);
+    });
+}
+
+$('#slider a.js-slide-to').click(function() {
+    var current = window.location + "";
+    var newurl =  current + $(this).attr("href");
+
+    if ($(this).attr("href").indexOf('/') != $(this).attr("href").length - 1) {
+        newurl = current.substr(0, current.indexOf($(this).attr("href")) + $(this).attr("href").length + 1);
+    }
+
+    history.pushState({ path:  this.path }, '', newurl)
+    var sliderurl = newurl;
+
+    if (sliderurl.indexOf('slider') < 0) {
+        sliderurl = newurl.split('&path')[0] + '&slider=' + '&path' + newurl.split('&path')[1];
+    }
+
+    $.get(sliderurl, function(data) {
+        slideTo(data)      
+    })
+  return false  
+})
+</script>
