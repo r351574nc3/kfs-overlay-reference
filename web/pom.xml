@@ -34,7 +34,7 @@ limitations under the License.
     <env.filter>${filter.directory}/${build.environment}-build.properties</env.filter>
     <login.user>williamh</login.user>
     <default.context.path>${project.parent.artifactId}</default.context.path>
-    <jrebel.phase>none</jrebel.phase>
+    <jrebel.phase>generate-resources</jrebel.phase>
   </properties>
   
   
@@ -171,6 +171,10 @@ limitations under the License.
                         <name>log4j.settings.file</name><value>${user.home}/main/${build.environment}/j2ee/log4j.properties</value>
                     </systemProperty>
                 </systemProperties>
+                <webAppConfig>
+                    <contextPath>/kfs-tem</contextPath>
+                </webAppConfig>
+                <!--
                 <webAppSourceDirectory>src/main/webapp</webAppSourceDirectory>
                 <contextPath>/kfs-tem</contextPath>
                 <descriptor>src/main/webapp/WEB-INF/web.xml</descriptor>
@@ -179,11 +183,13 @@ limitations under the License.
                     <descriptor>src/main/webapp/WEB-INF/web.xml</descriptor>
                 </webApp>
                 <classesDirectory>target/classes</classesDirectory>
+                -->
             </configuration>
         </plugin>
         <plugin>
             <groupId>org.zeroturnaround</groupId>
             <artifactId>jrebel-maven-plugin</artifactId>
+            <!--
             <configuration>
                 <addResourcesDirToRebelXml>true</addResourcesDirToRebelXml>
                 <alwaysGenerate>true</alwaysGenerate>                
@@ -207,15 +213,7 @@ limitations under the License.
                 </classpath>
                 <war dir="target/kfs-tem-dev" />
             </configuration>
-            <executions>
-                <execution>
-                    <id>generate-rebel-xml</id>
-                    <goals>
-                        <goal>generate</goal>
-                    </goals>
-                    <phase>${jrebel.phase}</phase>
-                </execution>
-            </executions>
+            -->
         </plugin>
     </plugins>
 

@@ -12,7 +12,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.kualigan.pom</groupId>
@@ -62,7 +63,7 @@ limitations under the License.
     <bouncycastle.version>1.46</bouncycastle.version>
     <commons-beanutils.version>1.8.3-kuali</commons-beanutils.version>
     <cxf.version>2.2.9</cxf.version>
-    <jetty.version>7.5.1.v20110908</jetty.version>
+    <jetty.version>8.1.5.v20120716</jetty.version>
     <jsp-api.version>2.1</jsp-api.version>
     <jsp.version>2.1</jsp.version>
     <jstl.version>1.2</jstl.version>
@@ -83,6 +84,7 @@ limitations under the License.
     <tomcat7-maven-plugin.version>2.0-beta-1</tomcat7-maven-plugin.version>
 
     <jetty.phase>none</jetty.phase>
+    <jrebel.phase>none</jrebel.phase>
     <kfs.maven.groupId>org.kualigan.kfs</kfs.maven.groupId>
     <kfs.maven.version>4.1.1-7</kfs.maven.version>
     <kfs.external.unpack.phase>none</kfs.external.unpack.phase>
@@ -645,6 +647,15 @@ limitations under the License.
             <groupId>org.zeroturnaround</groupId>
             <artifactId>jrebel-maven-plugin</artifactId>
             <version>${jrebel-maven-plugin.version}</version>
+            <executions>
+                <execution>
+                    <id>generate-rebel-xml</id>
+                    <goals>
+                        <goal>generate</goal>
+                    </goals>
+                    <phase>${jrebel.phase}</phase>
+                </execution>
+            </executions>
         </plugin>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
