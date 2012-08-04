@@ -34,8 +34,8 @@
     <div class="frame frame-center" data-path="/" data-permalink-url="/ajaxorg/ace/tree/2956f1b61f7e9801ac604fb20242111260bf261c" data-title="ajaxorg/ace · GitHub" data-type="tree" data-cached-commit-url="/ajaxorg/ace/cache/commits/2956f1b61f7e9801ac604fb20242111260bf261c?commit_sha=2956f1b61f7e9801ac604fb20242111260bf261c&amp;path=">
       <div class="bubble tree-browser-wrapper span10 offset1">
         <div class="accordion" id="accordion">
-        <div class="header row">
-          <div class="span2 offset1">name</div>
+        <div class="th row">
+          <div class="span2 offset1" >name</div>
           <div class="span2">age</div>
           <div class="span3"><!--
             <div class="history">
@@ -44,11 +44,10 @@
             message
           </div>
         </div>
-
         <c:forEach items="${KualiForm.sources}" var="sourceItem">
         <div class="accordion-group">
           <div class="row">
-                <div class="span1 icon"> <span class="mini-icon mini-icon-directory">&nbsp;</span> </div>
+                <div class="span1 icon"><i class="icon-folder-close"></i></div>
                 <div class="span2 content accordion-heading">
                     <a class="accordion-toggle" data-toggle="collapse" 
                                                 data-parent="#accordion" 
@@ -59,7 +58,7 @@
           <div class="row">
             <div id="${sourceItem.id}" class="span10 accordion-body collapse in">
                 <div class="accordion-inner" style="height: 480px">
-                    <div class="span10 table-bordered bubble" style="height: 100%" id="editor">some text</div>
+                    <div class="span10 table-bordered" style="height: 100%" id="editor">some text</div>
                         <script>
                             var editor = ace.edit("editor");
                             editor.setTheme("ace/theme/twilight");

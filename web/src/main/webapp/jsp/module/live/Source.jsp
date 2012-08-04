@@ -24,15 +24,21 @@
         <style>
             #editor {
                 position: absolute;
-                width: 95%;
+                width: 100%;
                 height: 480px;
             }
             .bubble {
+                position: relative;
+                float: left;
+                margin-left: -60px;
                 background: #EEE;
                 padding: 3px;
-                background: #EEE;
+                #background: #EEE;
                 border-radius: 3px;
             }
+        .accordion-group {
+            background: white;
+        }
         </style>
         <link href="css/bootstrap.css" rel="stylesheet">
         <style type="text/css">
@@ -40,6 +46,20 @@
             padding-top: 60px;
             padding-bottom: 40px;
           }
+        .tree-browser-wrapper div.th   {
+            background-color: #FBFBFB;
+            background-image: -moz-linear-gradient(center top , #FFFFFF, #F5F5F5);
+            background-repeat: repeat-x;
+            border: 1px solid #DDDDDD;
+            border-radius: 3px 3px 3px 3px;
+            box-shadow: 0 1px 0 #FFFFFF inset;
+            list-style: none outside none;
+            margin: 0 0 0px;
+            padding: 7px 14px;        
+        }
+        .span1.icon {
+            padding : 10 0 0 10;
+        }
         </style>
         <link href="css/bootstrap-responsive.css" rel="stylesheet">
         <script src="scripts/module/live/source.js" type="text/javascript" charset="utf-8"></script>
