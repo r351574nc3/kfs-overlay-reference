@@ -275,7 +275,10 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
                 final String relative = p.substring(pathStr.length() + offset);
                 if (relative.indexOf(File.separator) == -1 
                     && relative.indexOf(".") > -1) { // non-directory
-                    retval.add(newSource(getObjectId(relative).name(), relative));
+                    final ObjectId id = getObjectId(relative);
+                    if (id != null) { // probably is a dir otherwise
+                        retval.add(newSource(id.name(), relative));
+                    }
                 }
                 else {
                     final String dirName = relative.substring(0, relative.indexOf(File.separator));

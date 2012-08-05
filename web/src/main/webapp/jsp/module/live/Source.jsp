@@ -59,6 +59,11 @@
         .span1.icon {
             padding : 10 0 0 10;
         }
+    
+        li.globalbuttons {
+            padding-top : 10px;
+            padding-bottom : 10px;
+        }
 
         </style>
         <link href="css/bootstrap.css" rel="stylesheet">
@@ -75,9 +80,6 @@
         <script src="assets/js/bootstrap-popover.js"></script>
         <script src="assets/js/bootstrap-button.js"></script>
         <script src="assets/js/bootstrap-collapse.js"></script>
-    <!--
-        <script src="scripts/require.js"></script>
--->
         <script src="scripts/ace/ace.js" type="text/javascript" charset="utf-8"></script>
         <script src="scripts/ace/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
         <script language="JavaScript" type="text/javascript" src="/kfs-tem/dwr/engine.js"></script>
@@ -89,19 +91,33 @@
         <div class="navbar navbar-fixed-top">
           <div class="navbar-inner">
             <div class="container">
-              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+              <a class="btn btn-navbar" data-toggle="collapse" data-target="#nav-collapse">
+                <span class="icon-bar">test</span>
+                <span class="icon-bar">test1</span>
+                <span class="icon-bar">test2</span>
               </a>
-              <a class="brand" href="#">Source Document</a>
-              <div class="nav-collapse">
+              <span class="brand" href="#">Source Document</span>
+              <div class="nav-collapse" id="nav-collapse">
                 <ul class="nav">
-                  <li class="active"><a href="#">Home</a></li>
+                  <li class="globalbuttons"><html:submit styleClass="globalbuttons" 
+                                property="methodToCall.submit" 
+                                title="submit" alt="submit" 
+                                onclick="resetScrollPosition();" 
+                                tabindex="${tabindex}" /></li>
+                  <li class="globalbuttons"><html:submit styleClass="globalbuttons" 
+                                property="methodToCall.save" 
+                                title="save" alt="save" 
+                                onclick="resetScrollPosition();" 
+                                tabindex="${tabindex}" value="Save" /></li>
+                  <li class="globalbuttons"><html:submit styleClass="globalbuttons" 
+                                property="methodToCall.cancel" 
+                                title="cancel" alt="cancel" 
+                                onclick="resetScrollPosition();" 
+                                tabindex="${tabindex}" value="Cancel" /></li>
                   <li><a href="#about">About</a></li>
                   <li><a href="#contact">Contact</a></li>
                 </ul>
-              </div><!--/.nav-collapse -->
+              </div>
             </div>
           </div>
         </div>
