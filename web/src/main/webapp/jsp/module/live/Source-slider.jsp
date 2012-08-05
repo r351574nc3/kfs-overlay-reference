@@ -133,4 +133,5 @@ $('#slider a.js-slide-to').click(function() {
     })
   return false  
 })
+$(".collapse").collapse('hide')
 </script>
