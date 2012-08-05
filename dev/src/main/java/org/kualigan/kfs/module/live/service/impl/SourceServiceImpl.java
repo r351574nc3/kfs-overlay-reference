@@ -90,6 +90,8 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
     };
 
     private SourceBuilderFactory sourceBuilderFactory;
+    private List<Source> sources;
+    private List<String> sourcePaths;
     
     protected String convertLessThanOneThousand(int number) {
         String soFar;
@@ -186,7 +188,11 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
      * @see org.kualigan.kfs.module.live.businessobject.Source;
      * @see org.kualigan.kfs.module.live.service.SourceService;
      */
-    public List<Source> listSources() throws Exception {        
+    public List<Source> listSources() throws Exception {
+        if (sources != null) {
+            return sources;
+        }
+        
         final List<Source> retval = new LinkedList<Source>();
         final String repodir = System.getProperty("user.dir"); 
         infof("Creating repository at %s", repodir);
@@ -213,10 +219,16 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
                 warnf(e.getMessage());
             }
 		}
-        return retval;
+        sources = retval;
+        
+        return sources;
     }
     
     protected List<String> listSourcePaths() throws Exception {
+        if (sourcePaths != null) {
+            return sourcePaths;
+        }
+        
         final List<String> retval = new LinkedList<String>();
         final String repodir = System.getProperty("user.dir"); 
         infof("Creating repository at %s", repodir);
@@ -243,7 +255,8 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
                 warnf(e.getMessage());
             }
 		}
-        return retval;
+        sourcePaths = retval;
+        return sourcePaths;
     }
 
     /**
@@ -260,17 +273,21 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
             if (p.startsWith(pathStr)) {
                 final int offset = pathStr.endsWith(File.separator) ? 0 : 1;
                 final String relative = p.substring(pathStr.length() + offset);
-                if (relative.indexOf(File.separator) > -1) {
+                if (relative.indexOf(File.separator) == -1 
+                    && relative.indexOf(".") > -1) { // non-directory
+                    retval.add(newSource(getObjectId(relative).name(), relative));
+                }
+                else {
                     final String dirName = relative.substring(0, relative.indexOf(File.separator));
                     infof("Adding dir %s", dirName);
-                    retval.add(newSource(null, dirName + File.separator));
+                    retval.add(newSource("directory" + convert(retval.size()), dirName + File.separator));
                 }
             }
             else if (pathStr.equals("") || pathStr.equals(".")) {
                 if (p.indexOf(File.separator) > -1) {
-                    final String dirName = p.substring(0, p.indexOf(File.separator));
+                    final String dirName = p.substring(0, p.indexOf(File.separator)) + File.separator;
                     infof("Adding dir %s", dirName);
-                    retval.add(newSource("directory" + convert(retval.size()), dirName + File.separator));
+                    retval.add(newSource("directory" + convert(retval.size()), dirName));
                 }
             }
         }

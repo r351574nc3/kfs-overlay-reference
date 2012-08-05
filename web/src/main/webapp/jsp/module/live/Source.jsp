@@ -22,30 +22,29 @@
         <meta name="description" content="">
         <meta name="author" content="">
         <style>
-            #editor {
+            .editor {
                 position: absolute;
-                width: 100%;
+                width: 90%;
                 height: 480px;
             }
             .bubble {
                 position: relative;
                 float: left;
-                margin-left: -60px;
                 background: #EEE;
                 padding: 3px;
+                margin-left: -60px;
                 #background: #EEE;
                 border-radius: 3px;
             }
         .accordion-group {
             background: white;
         }
-        </style>
-        <link href="css/bootstrap.css" rel="stylesheet">
-        <style type="text/css">
-          body {
+
+        body {
             padding-top: 60px;
             padding-bottom: 40px;
-          }
+        }
+
         .tree-browser-wrapper div.th   {
             background-color: #FBFBFB;
             background-image: -moz-linear-gradient(center top , #FFFFFF, #F5F5F5);
@@ -60,7 +59,9 @@
         .span1.icon {
             padding : 10 0 0 10;
         }
+
         </style>
+        <link href="css/bootstrap.css" rel="stylesheet">
         <link href="css/bootstrap-responsive.css" rel="stylesheet">
         <script src="scripts/module/live/source.js" type="text/javascript" charset="utf-8"></script>
         <script src="scripts/jquery-1.7.2.min.js"></script>
@@ -74,6 +75,9 @@
         <script src="assets/js/bootstrap-popover.js"></script>
         <script src="assets/js/bootstrap-button.js"></script>
         <script src="assets/js/bootstrap-collapse.js"></script>
+    <!--
+        <script src="scripts/require.js"></script>
+-->
         <script src="scripts/ace/ace.js" type="text/javascript" charset="utf-8"></script>
         <script src="scripts/ace/theme-twilight.js" type="text/javascript" charset="utf-8"></script>
         <script language="JavaScript" type="text/javascript" src="/kfs-tem/dwr/engine.js"></script>

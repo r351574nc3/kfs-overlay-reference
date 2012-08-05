@@ -14,13 +14,14 @@
  limitations under the License.
 --%>
 <%@ include file="/jsp/sys/kfsTldHeader.jsp"%>
-    <div id="slider row">
+    <div id="slider">
+        <div class="row">
         <div class="span10 offset1">
         <ul class="breadcrumb">
             <c:forTokens items="${param.path}" delims="/" varStatus="status" var="path">
             <c:choose>
             <c:when test="${not status.last}">
-            <li><a href="${fn:substringBefore(param.path, path)}${path}">${path}</a> <span class="divider">/</span></li>
+            <li><a class="js-slide-to" href="${fn:substringBefore(param.path, path)}${path}">${path}</a> <span class="divider">/</span></li>
             </c:when>
             <c:otherwise>
             <li class="active">${path}</li>
@@ -29,9 +30,10 @@
             </c:forTokens>
         </ul>
         </div>
+        </div>
 
   <div class="frames">
-    <div class="frame frame-center" data-path="/" data-permalink-url="/ajaxorg/ace/tree/2956f1b61f7e9801ac604fb20242111260bf261c" data-title="ajaxorg/ace · GitHub" data-type="tree" data-cached-commit-url="/ajaxorg/ace/cache/commits/2956f1b61f7e9801ac604fb20242111260bf261c?commit_sha=2956f1b61f7e9801ac604fb20242111260bf261c&amp;path=">
+    <div class="frame frame-center row" data-path="/" data-permalink-url="/ajaxorg/ace/tree/2956f1b61f7e9801ac604fb20242111260bf261c" data-title="ajaxorg/ace · GitHub" data-type="tree" data-cached-commit-url="/ajaxorg/ace/cache/commits/2956f1b61f7e9801ac604fb20242111260bf261c?commit_sha=2956f1b61f7e9801ac604fb20242111260bf261c&amp;path=">
       <div class="bubble tree-browser-wrapper span10 offset1">
         <div class="accordion" id="accordion">
         <div class="th row">
@@ -47,27 +49,50 @@
         <c:forEach items="${KualiForm.sources}" var="sourceItem">
         <div class="accordion-group">
           <div class="row">
-                <div class="span1 icon"><i class="icon-folder-close"></i></div>
+                <div class="span1 icon">
+<c:choose>
+    <c:when test="${sourceItem.type == 'directory'}">
+                    <i class="icon-folder-close"></i>
+    </c:when>
+    <c:otherwise>
+                    <i class="icon-file"></i>
+    </c:otherwise>
+</c:choose>
+                </div>
                 <div class="span2 content accordion-heading">
+<c:choose>
+    <c:when test="${sourceItem.type == 'directory'}">
+                    <a class="accordion-toggle js-slide-to" data-toggle="collapse" 
+                                           data-parent="#accordion" 
+                                           href="${sourceItem.path}">${sourceItem.path}</a>
+    </c:when>
+    <c:otherwise>
                     <a class="accordion-toggle" data-toggle="collapse" 
                                                 data-parent="#accordion" 
-                                                href="${sourceItem.path}">${sourceItem.path}</a></div>
+                                                href="#${sourceItem.id}">${sourceItem.path}</a>
+    </c:otherwise>
+</c:choose>
+                </div>
                 <div class="span2 age">  </div>
                 <div class="span3 message">  </div>
           </div>
+          <c:if test="${sourceItem.type != 'directory'}">
           <div class="row">
             <div id="${sourceItem.id}" class="span10 accordion-body collapse in">
                 <div class="accordion-inner" style="height: 480px">
-                    <div class="span10 table-bordered" style="height: 100%" id="editor">some text</div>
-                        <script>
-                            var editor = ace.edit("editor");
+                    <div class="span10 table-bordered editor" style="height: 100%" id="editor${sourceItem.id}"></div>
+                    <script src="scripts/ace/mode-${sourceItem.type}.js" type="text/javascript" charset="utf-8"></script>
+                       <script>
+                            var editor = ace.edit("editor${sourceItem.id}");
                             editor.setTheme("ace/theme/twilight");
+                            var EditorMode = require("ace/mode/${sourceItem.type}").Mode;
+                            editor.getSession().setMode(new EditorMode());
                         </script>
-                    </div>
                 </div>
             </div>
           </div>
-        </div>
+          </c:if>
+          </div>
         </c:forEach>
 
         </div>
@@ -91,7 +116,7 @@ function slideTo(data) {
 $('#slider a.js-slide-to').click(function() {
     var current = window.location + "";
     var newurl =  current + $(this).attr("href");
-
+    
     if ($(this).attr("href").indexOf('/') != $(this).attr("href").length - 1) {
         newurl = current.substr(0, current.indexOf($(this).attr("href")) + $(this).attr("href").length + 1);
     }
