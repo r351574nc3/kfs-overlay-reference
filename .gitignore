@@ -1,0 +1,12 @@
+target
+web/src/main/webapp/static
+web/src/main/webapp/kr
+web/src/main/webapp/ksb
+web/src/main/webapp/kcb
+web/src/main/webapp/kew
+web/src/main/webapp/ken
+web/src/main/webapp/kim
+images
+images-portal
+.settings
+.c9revisions
