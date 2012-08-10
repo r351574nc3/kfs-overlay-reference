@@ -257,8 +257,8 @@
 						</c:if>
 					</tr>
 					<c:set var="colSpan" value="${1}" />
-					<c:set var="colSpan" value="${KualiForm.showPolicy?colSpan+1:colSpan}" />
-					<c:set var="colSpan" value="${KualiForm.showPaymentMethods?colSpan+1:colSpan}" />
+					<c:set var="colSpan" value="${KualiForm.showPolicy ? colSpan + 1 : colSpan}" />
+					<c:set var="colSpan" value="${KualiForm.showPaymentMethods ? colSpan + 1 : colSpan}" />
 					<tr>
 						<th class="bord-l-b" colspan="3">
 							<div align="left">

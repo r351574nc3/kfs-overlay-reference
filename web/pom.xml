@@ -192,6 +192,18 @@ limitations under the License.
         <plugin>
             <groupId>org.zeroturnaround</groupId>
             <artifactId>jrebel-maven-plugin</artifactId>
+            <configuration>
+              <!--
+                root is 2 directoris away from jar/war modules
+              -->
+              <relativePath>../../</relativePath>
+              <!--
+                use a system property for specifing root directory (note the double $)
+                start your application with -Drebel.root=c:/projects/
+              -->
+              <rootPath>$${rebel.root}</rootPath>
+            </configuration>
+
             <!--
             <configuration>
                 <addResourcesDirToRebelXml>true</addResourcesDirToRebelXml>

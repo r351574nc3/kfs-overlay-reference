@@ -38,10 +38,9 @@
 		</property>
 		<property name="scriptConfigurationFilePaths">
 			<list>
-				<value>org/kualigan/kfs/module/live/dwr-live.xml</value>
+				<value>org/kuali/kfs/module/tem/dwr-tem.xml</value>
 			</list>
 		</property>
-        
 		<property name="databaseRepositoryFilePaths">
 			<list>
 				<value>org/kuali/kfs/module/tem/ojb-tem.xml</value>
@@ -223,6 +222,13 @@
     <bean id="agencyAuditLookupable" parent="kualiLookupable">
         <property name="lookupableHelperService">
             <ref bean="agencyAuditLookupableHelperService" />
+        </property>
+    </bean>
+    
+    <bean id="creditCardStagingDataLookupableHelperService" class="org.kuali.kfs.module.tem.businessobject.lookup.CreditCardStagingDataLookupableHelperServiceImpl" scope="prototype" parent="lookupableHelperService" />
+    <bean id="creditCardStagingDataLookupable" parent="kualiLookupable">
+        <property name="lookupableHelperService">
+            <ref bean="creditCardStagingDataLookupableHelperService" />
         </property>
     </bean>
 
@@ -489,6 +495,15 @@
       <property name="workflowDocumentService" ref="workflowDocumentService" />
       <property name="kualiRuleService" ref="kualiRuleService" />
       <property name="travelDocumentService" ref="temTravelDocumentService" />
+    </bean>
+    
+    <bean id="travelEncumbranceService" parent="travelEncumbranceService-parentBean" />
+    <bean id="travelEncumbranceService-parentBean"
+      class="org.kuali.kfs.module.tem.document.service.impl.TravelEncumbranceServiceImpl" abstract="true">
+      <property name="businessObjectService" ref="businessObjectService" />
+      <property name="travelDocumentService" ref="temTravelDocumentService" />
+      <property name="encumbranceService" ref="glEncumbranceService" />
+      <property name="generalLedgerPendingEntryService" ref="generalLedgerPendingEntryService" />
     </bean>
 
 	<bean id="temTravelAuthorizationService" parent="temTravelAuthorizationService-parentBean" />
@@ -759,7 +774,9 @@
         <property name="importedExpensePendingEntryService" ref="importedExpensePendingEntryService" />
     </bean>
     
-    <bean id="creditCardAgencyService" class="org.kuali.kfs.module.tem.service.impl.CreditCardAgencyServiceImpl" />
+    <bean id="creditCardAgencyService" class="org.kuali.kfs.module.tem.service.impl.CreditCardAgencyServiceImpl" >
+        <property name="businessObjectService" ref="businessObjectService" />
+    </bean>
 		
 	<bean id="actualExpenseService"
 		class="org.kuali.kfs.module.tem.service.impl.ActualExpenseServiceImpl" />
@@ -1180,6 +1197,7 @@
 		class="org.kuali.kfs.module.tem.document.web.struts.CloseQuestionHandler">
 		<property name="configurationService" ref="kualiConfigurationService" />
 		<property name="travelDocumentService" ref="temTravelDocumentService" />
+        <property name="travelEncumbranceService" ref="travelEncumbranceService" />
 		<property name="documentDao" ref="documentDao" />
 		<property name="dataDictionaryService" ref="dataDictionaryService" />
 		<property name="accountingDocumentRelationshipService" ref="temAccountingDocumentRelationshipService" />
