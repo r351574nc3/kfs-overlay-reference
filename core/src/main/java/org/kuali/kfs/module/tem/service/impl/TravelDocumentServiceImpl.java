@@ -395,15 +395,19 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
      */
     protected PerDiemExpense setupMileageRate(final PerDiemExpense newExpense, 
                                               final PerDiemExpense oldExpense) {
+                                                  
+        // Setup a default
         final List<KeyLabelPair> mileageRates = getMileageRatesForExpense(newExpense);
         if (mileageRates != null && mileageRates.size() > 0) {
             newExpense.setMileageRateId((Integer) mileageRates.get(0).getKey());
         }
         
+        // No point in continuing
         if (oldExpense == null) {
             return newExpense;
         }
         
+        // Use old id and miles because they exist
         if (isMileageRateKnown(oldExpense.getMileageRateId(), mileageRates)) {
             newExpense.setMileageRateId(oldExpense.getMileageRateId());
             newExpense.setMiles(oldExpense.getMiles());
