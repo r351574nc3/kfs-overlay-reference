@@ -29,5 +29,8 @@ public interface SourceService {
     List<Source> listSources() throws Exception;
     
     Set<Source> sources(String path) throws Exception;
+    
+    String getSourceText(final String idStr);
+
 }
  

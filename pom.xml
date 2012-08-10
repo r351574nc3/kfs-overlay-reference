@@ -63,7 +63,7 @@ limitations under the License.
     <bouncycastle.version>1.46</bouncycastle.version>
     <commons-beanutils.version>1.8.3-kuali</commons-beanutils.version>
     <cxf.version>2.2.9</cxf.version>
-    <jetty.version>8.1.5.v20120716</jetty.version>
+    <jetty.version>7.5.1.v20110908</jetty.version>
     <jsp-api.version>2.1</jsp-api.version>
     <jsp.version>2.1</jsp.version>
     <jstl.version>1.2</jstl.version>

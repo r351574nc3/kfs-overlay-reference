@@ -14,8 +14,7 @@
  limitations under the License.
 --%>
 <%@ include file="/jsp/sys/kfsTldHeader.jsp"%>
-    <div id="slider">
-        <div class="row">
+    <div id="slider row">
         <div class="span10 offset1">
         <ul class="breadcrumb">
             <c:forTokens items="${param.path}" delims="/" varStatus="status" var="path">
@@ -30,10 +29,9 @@
             </c:forTokens>
         </ul>
         </div>
-        </div>
 
   <div class="frames">
-    <div class="frame frame-center row" data-path="/" data-permalink-url="/ajaxorg/ace/tree/2956f1b61f7e9801ac604fb20242111260bf261c" data-title="ajaxorg/ace · GitHub" data-type="tree" data-cached-commit-url="/ajaxorg/ace/cache/commits/2956f1b61f7e9801ac604fb20242111260bf261c?commit_sha=2956f1b61f7e9801ac604fb20242111260bf261c&amp;path=">
+    <div class="frame frame-center" data-path="/" data-permalink-url="/ajaxorg/ace/tree/2956f1b61f7e9801ac604fb20242111260bf261c" data-title="ajaxorg/ace · GitHub" data-type="tree" data-cached-commit-url="/ajaxorg/ace/cache/commits/2956f1b61f7e9801ac604fb20242111260bf261c?commit_sha=2956f1b61f7e9801ac604fb20242111260bf261c&amp;path=">
       <div class="bubble tree-browser-wrapper span10 offset1">
         <div class="accordion" id="accordion">
         <div class="th row">
@@ -76,23 +74,19 @@
                 <div class="span2 age">  </div>
                 <div class="span3 message">  </div>
           </div>
-          <c:if test="${sourceItem.type != 'directory'}">
           <div class="row">
             <div id="${sourceItem.id}" class="span10 accordion-body collapse in">
                 <div class="accordion-inner" style="height: 480px">
-                    <div class="span10 table-bordered editor" style="height: 100%" id="editor${sourceItem.id}"></div>
-                    <script src="scripts/ace/mode-${sourceItem.type}.js" type="text/javascript" charset="utf-8"></script>
-                       <script>
-                            var editor = ace.edit("editor${sourceItem.id}");
+                    <div class="span10 table-bordered" style="height: 100%" id="editor">some text</div>
+                        <script>
+                            var editor = ace.edit("editor");
                             editor.setTheme("ace/theme/twilight");
-                            var EditorMode = require("ace/mode/${sourceItem.type}").Mode;
-                            editor.getSession().setMode(new EditorMode());
                         </script>
+                    </div>
                 </div>
             </div>
           </div>
-          </c:if>
-          </div>
+        </div>
         </c:forEach>
 
         </div>
@@ -113,7 +107,7 @@ function slideTo(data) {
     });
 }
 
-$('#slider a.js-slide-to').click(function() {
+$('.js-slide-to').click(function() {
     var current = window.location + "";
     var newurl =  current + $(this).attr("href");
     
@@ -133,5 +127,4 @@ $('#slider a.js-slide-to').click(function() {
     })
   return false  
 })
-$(".collapse").collapse('hide')
 </script>

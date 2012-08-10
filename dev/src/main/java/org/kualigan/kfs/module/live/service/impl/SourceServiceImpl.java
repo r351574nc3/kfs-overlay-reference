@@ -325,10 +325,32 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
         return git.status().call().getUntracked();
     }
 
-    public void commit(final Source source) {
+    public void commit(final Source sourceId) {
     }
 
     public void push(final Source source) {
+    }
+    
+    protected Repository getRepository() throws Exception {
+        final String repodir = System.getProperty("user.dir"); 
+        final FileRepositoryBuilder builder = new FileRepositoryBuilder();
+        final Repository repository = builder.setGitDir(new File(repodir + File.separator + ".git"))
+              .readEnvironment() 
+              .findGitDir() 
+              .build();
+        return repository;
+    }
+    
+    public String getSourceText(final String idStr) {
+        try {
+            final ObjectId id = ObjectId.fromString(idStr);
+            final Repository repository = getRepository();
+            return new String(repository.open(id).getBytes());
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
     
     public Source newSource(final String objectId, final String path) throws Exception {

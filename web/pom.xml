@@ -171,8 +171,11 @@ limitations under the License.
                         <name>log4j.settings.file</name><value>${user.home}/main/${build.environment}/j2ee/log4j.properties</value>
                     </systemProperty>
                 </systemProperties>
+                <scanIntervalSeconds>0</scanIntervalSeconds>
+                <classesDirectory>target/classes</classesDirectory>
                 <webAppConfig>
                     <contextPath>/kfs-tem</contextPath>
+                    <descriptor>src/main/webapp/WEB-INF/web.xml</descriptor>
                 </webAppConfig>
                 <!--
                 <webAppSourceDirectory>src/main/webapp</webAppSourceDirectory>
