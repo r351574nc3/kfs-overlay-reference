@@ -224,6 +224,11 @@ public class SourceServiceImpl implements org.kualigan.kfs.module.live.service.S
         return sources;
     }
     
+    /**
+     * 
+     * @return {@link List} if paths as {@link String}
+     * @throws Exception
+     */
     protected List<String> listSourcePaths() throws Exception {
         if (sourcePaths != null) {
             return sourcePaths;

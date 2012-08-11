@@ -172,7 +172,9 @@ limitations under the License.
                     </systemProperty>
                 </systemProperties>
                 <scanIntervalSeconds>0</scanIntervalSeconds>
+                <!--
                 <classesDirectory>target/classes</classesDirectory>
+                -->
                 <webAppConfig>
                     <contextPath>/kfs-tem</contextPath>
                     <descriptor>src/main/webapp/WEB-INF/web.xml</descriptor>
@@ -193,15 +195,17 @@ limitations under the License.
             <groupId>org.zeroturnaround</groupId>
             <artifactId>jrebel-maven-plugin</artifactId>
             <configuration>
+              <alwaysGenerate>true</alwaysGenerate>
+              <addResourcesDirToRebelXml>true</addResourcesDirToRebelXml>
               <!--
-                root is 2 directoris away from jar/war modules
+                root is 2 directories away from jar/war modules
               -->
               <relativePath>../../</relativePath>
               <!--
                 use a system property for specifing root directory (note the double $)
                 start your application with -Drebel.root=c:/projects/
               -->
-              <rootPath>$${rebel.root}</rootPath>
+              <rootPath>${rebel.root}</rootPath>
             </configuration>
 
             <!--

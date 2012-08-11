@@ -51,7 +51,7 @@
 		    <artifactId>slf4j-api</artifactId>
 		</dependency>
   </dependencies>
-  
+ 
     <profiles>
         <profile>
             <id>non-dev</id>
