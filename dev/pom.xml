@@ -28,10 +28,6 @@
   <properties>
   </properties>
   
-  <build>
-      <directory>${basedir}/../web/target/</directory>
-  </build>
-
   <dependencies>
     <dependency>
       <groupId>com.rsmart.kuali.kfs</groupId>
