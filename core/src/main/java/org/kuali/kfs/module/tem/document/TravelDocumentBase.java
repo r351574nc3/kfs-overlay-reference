@@ -1584,9 +1584,14 @@ public abstract class TravelDocumentBase extends AccountingDocumentBase implemen
      * @param group traveler line
      */
     public void addGroupTravelerLine(GroupTraveler line) {
-        line.setFinancialDocumentLineNumber(this.groupTravelers.size() + 1);
-        line.setDocumentNumber(this.documentNumber);
-        this.groupTravelers.add(line);
+        final String sequenceName = traveler.getSequenceName();
+        // Because all expense types use the same sequence, it doesn't matter which class grabs the sequence
+        final Long sequenceNumber = getSequenceAccessorService().getNextAvailableSequenceNumber(sequenceName, GroupTraveler.class);
+        traveler.setId(sequenceNumber);
+        traveler.setDocumentNumber(this.documentNumber);
+        
+        getGroupTravelers().add(traveler);
+        notifyChangeListeners(new PropertyChangeEvent(this, "groupTravelers", null, traveler));
     }
 
     /**
@@ -1970,22 +1975,5 @@ public abstract class TravelDocumentBase extends AccountingDocumentBase implemen
      */
     public boolean hasCustomDVDistribution(){
        return false;
-    }
-    
-    /**
-     * @see org.kuali.kfs.module.tem.document.TravelDocument#addGroupTraveler(GroupTraveler)
-     */
-    @Override
-    @Transient
-    public void addGroupTraveler(final GroupTraveler traveler) {
-        final String sequenceName = traveler.getSequenceName();
-        // Because all expense types use the same sequence, it doesn't matter which class grabs the sequence
-        final Long sequenceNumber = getSequenceAccessorService().getNextAvailableSequenceNumber(sequenceName, ImportedExpense.class);
-        traveler.setId(sequenceNumber);
-        traveler.setDocumentNumber(this.documentNumber);
-        
-        getGroupTravelers().add(traveler);
-        notifyChangeListeners(new PropertyChangeEvent(this, "groupTravelers", null, traveler));
-    }
-
+    }    
 }

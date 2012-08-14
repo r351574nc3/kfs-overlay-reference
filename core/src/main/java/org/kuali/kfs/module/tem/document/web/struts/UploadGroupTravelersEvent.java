@@ -84,13 +84,7 @@ public class UploadGroupTravelersEvent implements Observer {
             }
             if (allPassed) {
                 for (final GroupTraveler traveler : importedGroupTravelers) {
-                    document.addGroupTraveler(traveler);
-                    /*                    
-                    GroupTraveler groupTraveler = (GroupTraveler) o;
-                    groupTraveler.setDocumentNumber(travelDoc.getDocumentNumber());
-                    groupTraveler.setFinancialDocumentLineNumber(travelDoc.getGroupTravelers().size() + 1);
-                    travelDoc.getGroupTravelers().add(groupTraveler);
-                    */
+                    document.addGroupTravelerLine(traveler);
                 }
             }
         }
