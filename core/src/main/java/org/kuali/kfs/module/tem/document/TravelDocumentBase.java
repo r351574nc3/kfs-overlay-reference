@@ -1583,7 +1583,7 @@ public abstract class TravelDocumentBase extends AccountingDocumentBase implemen
      * 
      * @param group traveler line
      */
-    public void addGroupTravelerLine(GroupTraveler line) {
+    public void addGroupTravelerLine(GroupTraveler traveler) {
         final String sequenceName = traveler.getSequenceName();
         // Because all expense types use the same sequence, it doesn't matter which class grabs the sequence
         final Long sequenceNumber = getSequenceAccessorService().getNextAvailableSequenceNumber(sequenceName, GroupTraveler.class);

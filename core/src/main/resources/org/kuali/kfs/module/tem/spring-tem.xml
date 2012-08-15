@@ -481,6 +481,11 @@
 		<property name="stateService" ref="stateService" />
 		<property name="persistenceStructureService" ref="persistenceStructureService"/>
 		<property name="universityDateService" ref="universityDateService" />
+        <property name="defaultAcceptableFileExtensions">
+            <list>
+                <value>csv</value>
+            </list>
+        </property>
 	</bean>
   
     <bean id="travelDisbursementService" parent="travelDisbursementService-parentBean" />
@@ -652,6 +657,7 @@
     </bean>
     
     <bean id="uploadGroupTravelersEvent" class="org.kuali.kfs.module.tem.document.web.struts.UploadGroupTravelersEvent">
+        <property name="travelDocumentService" ref="temTravelDocumentService" />        
     </bean>
 
 <!-- Not sure if I need these
@@ -1172,6 +1178,7 @@
 		class="org.kuali.kfs.module.tem.document.web.struts.AmendQuestionHandler">
 		<property name="configurationService" ref="kualiConfigurationService" />
 		<property name="travelService" ref="temTravelService" />
+        <property name="travelDocumentService" ref="temTravelDocumentService" />
 		<property name="documentDao" ref="documentDao" />
 		<property name="dataDictionaryService" ref="dataDictionaryService" />
 		<property name="accountingDocumentRelationshipService" ref="temAccountingDocumentRelationshipService" />
@@ -1198,7 +1205,8 @@
 		<property name="configurationService" ref="kualiConfigurationService" />
 		<property name="travelDocumentService" ref="temTravelDocumentService" />
         <property name="travelEncumbranceService" ref="travelEncumbranceService" />
-		<property name="documentDao" ref="documentDao" />
+	    <property name="documentService" ref="documentService" />
+  	    <property name="documentDao" ref="documentDao" />
 		<property name="dataDictionaryService" ref="dataDictionaryService" />
 		<property name="accountingDocumentRelationshipService" ref="temAccountingDocumentRelationshipService" />
 	</bean>

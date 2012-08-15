@@ -33,8 +33,9 @@ import static org.kuali.kfs.module.tem.TemConstants.TravelParameters.NON_EMPLOYE
 import static org.kuali.kfs.module.tem.TemConstants.TravelReimbursementParameters.DISPLAY_ADVANCES_IN_REIMBURSEMENT_TOTAL_IND;
 import static org.kuali.kfs.module.tem.TemConstants.TravelReimbursementParameters.ENABLE_ACCOUNTING_DISTRIBUTION_TAB_IND;
 import static org.kuali.kfs.module.tem.TemPropertyConstants.TRIP_INFO_UPDATE_TRIP_DTL;
-import static org.kuali.kfs.module.tem.util.BufferedLogger.debug;
+import static org.kuali.kfs.module.tem.util.BufferedLogger.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -1110,13 +1111,18 @@ public abstract class TravelActionBase extends KualiAccountingDocumentActionBase
      * @return An ActionForward
      */
     public ActionForward uploadGroupTravelerImportFile(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        info("Uploading file");
         TravelFormBase reqForm = (TravelFormBase) form;
         TravelDocumentBase travelDoc = (TravelDocumentBase) reqForm.getDocument();
         
         final TravelFormBase travelForm = (TravelFormBase) form;
         final TravelMvcWrapperBean mvcWrapper = newMvcDelegate(form);
 
-        travelForm.getObservable().notifyObservers(mvcWrapper);
+        info("Notifying observers");
+
+        final String fileContents = new String(reqForm.getGroupTravelerImportFile().getFileData());
+        travelForm.getObservable().notifyObservers(new Object[] {mvcWrapper, fileContents});
+                    
 
         return mapping.findForward(KFSConstants.MAPPING_BASIC);
 

@@ -353,5 +353,5 @@ public interface TravelDocument extends AccountingDocument, TravelEntertainmentM
      * 
      * @param traveler {@link GroupTraveler} instance that is valid
      */
-    void addGroupTraveler(final GroupTraveler traveler);
+    void addGroupTravelerLine(final GroupTraveler traveler);
 }

@@ -25,7 +25,13 @@ import static org.kuali.kfs.module.tem.TemConstants.TravelParameters.DOCUMENT_DT
 import static org.kuali.kfs.module.tem.TemConstants.TravelParameters.ENABLE_PER_DIEM_CATEGORIES;
 import static org.kuali.kfs.module.tem.TemConstants.TravelParameters.HOSTED_MEAL_EXPENSE_TYPES;
 import static org.kuali.kfs.module.tem.TemConstants.TravelParameters.NON_EMPLOYEE_TRAVELER_TYPE_CODES;
-import static org.kuali.kfs.module.tem.util.BufferedLogger.debug;
+import static org.kuali.kfs.module.tem.TemKeyConstants.ERROR_UPLOADPARSER_INVALID_FILE_FORMAT;
+import static org.kuali.kfs.module.tem.TemKeyConstants.ERROR_UPLOADPARSER_INVALID_NUMERIC_VALUE;
+import static org.kuali.kfs.module.tem.TemKeyConstants.ERROR_UPLOADPARSER_LINE;
+import static org.kuali.kfs.module.tem.TemKeyConstants.ERROR_UPLOADPARSER_PROPERTY;
+import static org.kuali.kfs.module.tem.TemKeyConstants.ERROR_UPLOADPARSER_WRONG_PROPERTY_NUMBER;
+import static org.kuali.kfs.module.tem.TemKeyConstants.MESSAGE_UPLOADPARSER_EXCEEDED_MAX_LENGTH;
+import static org.kuali.kfs.module.tem.TemKeyConstants.MESSAGE_UPLOADPARSER_INVALID_VALUE;import static org.kuali.kfs.module.tem.util.BufferedLogger.debug;
 import static org.kuali.kfs.module.tem.util.BufferedLogger.error;
 import static org.kuali.rice.kns.util.GlobalVariables.getMessageList;
 
@@ -86,6 +92,7 @@ import org.kuali.kfs.module.tem.document.service.AccountingDocumentRelationshipS
 import org.kuali.kfs.module.tem.document.service.TravelDocumentService;
 import org.kuali.kfs.module.tem.document.service.TravelReimbursementService;
 import org.kuali.kfs.module.tem.document.web.struts.TravelFormBase;
+import org.kuali.kfs.module.tem.exception.UploadParserException;
 import org.kuali.kfs.module.tem.service.TravelerService;
 import org.kuali.kfs.module.tem.util.ExpenseUtils;
 import org.kuali.kfs.sys.KFSConstants;
@@ -112,6 +119,7 @@ import org.kuali.rice.kns.bo.PersistableBusinessObject;
 import org.kuali.rice.kns.bo.State;
 import org.kuali.rice.kns.document.Document;
 import org.kuali.rice.kns.document.authorization.DocumentAuthorizer;
+import org.kuali.rice.kns.exception.InfrastructureException;
 import org.kuali.rice.kns.service.BusinessObjectService;
 import org.kuali.rice.kns.service.DataDictionaryService;
 import org.kuali.rice.kns.service.DateTimeService;
@@ -128,6 +136,7 @@ import org.kuali.rice.kns.util.GlobalVariables;
 import org.kuali.rice.kns.util.KNSPropertyConstants;
 import org.kuali.rice.kns.util.KualiDecimal;
 import org.kuali.rice.kns.util.ObjectUtils;
+import org.kuali.rice.kns.web.format.FormatException;
 import org.kuali.rice.kns.workflow.service.WorkflowDocumentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -153,6 +162,7 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
     private StateService stateService;
     private PersistenceStructureService persistenceStructureService;
     protected UniversityDateService universityDateService;
+    protected List<String> defaultAcceptableFileExtensions;
     
     /**
      * Creates and populates an individual per diem item.
@@ -345,74 +355,36 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
     }
 
     /**
-     * Determine if rates determined from {@link #getMileageRateKeyValues(Date)} contain a
-     * {@link MileageRate} for the given {@code id}
-     * 
-     * @param id to check for
-     * @param mileageRates {@link List} of {@link KeyLabelPair} instances from {@link #getMileageRateKeyValues(Date)}
-     * @return true if the rate is known or false if not
-     */
-    protected boolean isMileageRateKnown(final Integer id, final List<KeyLabelPair> mileageRates) {
-        if (ObjectUtils.isNull(mileageRates)
-            || mileageRates.size() < 1) {
-            return false;
-        }
-        
-        for (final KeyLabelPair pair : mileageRates) {
-            final Integer key = (Integer) pair.getKey();
-            if (id.equals(key.intValue())) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    /**
-     * Look up {@link MileageRate} {@link KeyLabelPair} instances for a given {@link PerDiemExpense}
-     * 
-     * @param expense {@link PerDiemExpense} too look up for
-     * @return {@link List} of {@link KeyLabelPair} instances
-     */
-    protected List<KeyLabelPair> getMileageRatesForExpense(final PerDiemExpense expense) {
-        Date searchDate = null;
-        try {
-            searchDate = getDateTimeService().convertToSqlDate(expense.getMileageDate());
-            return getMileageRateKeyValues(searchDate);
-        }
-        catch (ParseException ex) {
-            error("Unable to convert timestamp to sql date. Unable to populate PerDiemExpense with MileageRate.");
-            ex.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
      * 
      * This method populates the MileageRate on the rebuilt PerDiemExpense. It will attempt to use the old PerDiemExpense's values if possible.
      * @param newExpense
      * @param oldExpense
      * @return
      */
-    protected PerDiemExpense setupMileageRate(final PerDiemExpense newExpense, 
-                                              final PerDiemExpense oldExpense) {
-                                                  
-        // Setup a default
-        final List<KeyLabelPair> mileageRates = getMileageRatesForExpense(newExpense);
-        if (mileageRates != null && mileageRates.size() > 0) {
-            newExpense.setMileageRateId((Integer) mileageRates.get(0).getKey());
+    protected PerDiemExpense setupMileageRate(PerDiemExpense newExpense, PerDiemExpense oldExpense) {
+        try {
+            Date searchDate = getDateTimeService().convertToSqlDate(newExpense.getMileageDate());
+            List<KeyLabelPair> mileageRates = getMileageRateKeyValues(searchDate);
+            if (ObjectUtils.isNotNull(mileageRates)) {
+                for (KeyLabelPair pair : mileageRates) {
+                    Integer key = (Integer) pair.getKey();
+                    if (ObjectUtils.isNotNull(oldExpense) && oldExpense.getMileageRateId().intValue() == key.intValue()) {
+                        // use the same mileage rate as before
+                        newExpense.setMileageRateId(oldExpense.getMileageRateId());
+                        newExpense.setMiles(oldExpense.getMiles());
+                        break;
+                    }
+                }
+                if (ObjectUtils.isNull(newExpense.getMileageRateId())) {
+                    // mileage rate is different than it was before the change, use the first element in the list
+                    newExpense.setMileageRateId((Integer) mileageRates.get(0).getKey());
+                }
+            }
         }
-        
-        // No point in continuing
-        if (oldExpense == null) {
-            return newExpense;
+        catch (ParseException ex) {
+            error("Unable to convert timestamp to sql date. Unable to populate PerDiemExpense with MileageRate.");
+            ex.printStackTrace();
         }
-        
-        // Use old id and miles because they exist
-        if (isMileageRateKnown(oldExpense.getMileageRateId(), mileageRates)) {
-            newExpense.setMileageRateId(oldExpense.getMileageRateId());
-            newExpense.setMiles(oldExpense.getMiles());
-        }
-        
         return newExpense;
     }
     
@@ -505,11 +477,7 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
     }
 
     /**
-     * Get DV, TA, TAA, TAC, TR, and AV documents related to the given <code>document</code>. travel document either have a travel
-     * document number or they have the value of the <code>document</code> in their organization doc ids.
-     * 
-     * @param document {@link TravelDocument} to get other document instances related to
-     * @return A {@link Map} of {@link Document} instances where the key is the document type name
+     * @see org.kuali.kfs.module.tem.document.service.TravelDocumentService#getDocumentsRelatedTo(org.kuali.kfs.module.tem.document.TravelDocument)
      */
     @Override
     public Map<String, List<Document>> getDocumentsRelatedTo(final TravelDocument document) throws WorkflowException {
@@ -517,12 +485,7 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
     }
 
     /**
-     * Get DV, TA, TAA, TAC, TR, and AV documents related to the given <code>travelDocumentIdentifier</code>. travel document either
-     * have a TEM document number or they have the value of the <code>travelDocumentIdentifier</code> in their organization doc
-     * ids.
-     * 
-     * @param travelDocumentIdentifier integer that links all travel related documents together
-     * @return A {@link Map} of {@link Document} instances where the key is the document type name
+     * @see org.kuali.kfs.module.tem.document.service.TravelDocumentService#getDocumentsRelatedTo(java.lang.String)
      */
     @Override
     public Map<String, List<Document>> getDocumentsRelatedTo(final String documentNumber) throws WorkflowException {
@@ -557,6 +520,27 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
         }
 
         return retval;
+    }
+    
+    /**
+     * @see org.kuali.kfs.module.tem.document.service.TravelDocumentService#getDocumentsRelatedTo(org.kuali.kfs.module.tem.document.TravelDocument, java.lang.String[])
+     */
+    @Override
+    public List<Document> getDocumentsRelatedTo(final TravelDocument document, String... documentTypeList){
+        List<Document> relatedDocumentList = new ArrayList<Document>();
+        Map<String, List<Document>> relatedDocumentMap;
+        try {
+            relatedDocumentMap = getDocumentsRelatedTo(document);
+            for (String documentType : documentTypeList){
+                if (relatedDocumentMap.containsKey(documentType)){
+                    relatedDocumentList.addAll(relatedDocumentMap.get(documentType));
+                }
+            }
+        }
+        catch (WorkflowException ex) {
+            LOG.error(ex.getMessage(), ex);
+        }
+        return relatedDocumentList;
     }
 
     /**
@@ -652,15 +636,19 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
         return retval;
     }
 
+    /**
+     * @see org.kuali.kfs.module.tem.document.service.TravelDocumentService#find(java.lang.Class, java.lang.String)
+     */
     @Override
     public <T> List<T> find(final Class<T> travelDocumentClass, final String travelDocumentNumber) throws WorkflowException {
-        final List ids = getTravelDocumentDao().findDocumentNumbers(travelDocumentClass, travelDocumentNumber);
+        final List<String> ids = getTravelDocumentDao().findDocumentNumbers(travelDocumentClass, travelDocumentNumber);
 
-        if (ids.size() > 0) {
-            return (List<T>) getDocumentService().getDocumentsByListOfDocumentHeaderIds(travelDocumentClass, ids);
+        List<T> resultDocumentLists = new ArrayList<T>();
+        //retrieve the actual documents
+        if (!ids.isEmpty()) {
+            resultDocumentLists = getDocumentService().getDocumentsByListOfDocumentHeaderIds(travelDocumentClass, ids);
         }
-
-        return new ArrayList();
+        return resultDocumentLists;
     }
 
     /**
@@ -1239,6 +1227,26 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
         return document.getDocumentHeader().getWorkflowDocument().stateIsFinal();
     }
     
+    /**
+     * 
+     * @param document
+     * @return
+     */
+     @Override
+    public boolean isTravelAuthorizationProcessed(TravelAuthorizationDocument document){
+        return isFinal(document) || isProcessed(document);
+    }
+     
+     /**
+      * 
+      * @param document
+      * @return
+      */
+      @Override
+     public boolean isTravelAuthorizationOpened(TravelAuthorizationDocument document){
+         return isTravelAuthorizationProcessed(document) && isOpen(document);
+     }
+    
     @Override
     public boolean isUnsuccessful(TravelDocument document) {
         String status = document.getDocumentHeader().getWorkflowDocument().getRouteHeader().getDocRouteStatus();
@@ -1278,6 +1286,8 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
     }
     
     /**
+     * CLEAN UP
+     * 
      * Find the current travel authorization.  This includes any amendments.
      * @param trDocument
      * @return
@@ -1298,15 +1308,14 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
         else if (taaDocs != null && taaDocs.size() > 0){
             for (Document tempDocument : taaDocs){
                 //Find the doc that is the open to perform actions against.
-                if ((isFinal((TravelAuthorizationDocument)tempDocument)
-                        || isProcessed((TravelAuthorizationDocument)tempDocument))
-                        && isOpen((TravelAuthorizationDocument)tempDocument)){
+                if (isTravelAuthorizationOpened((TravelAuthorizationDocument)tempDocument)){
                     return (TravelAuthorizationDocument) tempDocument;
                 }
             }           
         }
         //return TA doc if no amendments exist
         else{
+            //CLEANUP - this may happen when the Travel document did not link to an TA for some reason..
             if(taDocs == null || taDocs.isEmpty()){
                 List<TravelAuthorizationDocument> tempTaDocs = find(TravelAuthorizationDocument.class, document.getTravelDocumentIdentifier());
                 taDocs = new ArrayList<Document>();
@@ -1324,23 +1333,16 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
     @Override
     public KualiDecimal getTotalCumulativeReimbursements(TravelDocument document) {
         KualiDecimal trTotal = KualiDecimal.ZERO;
-        List<Document> trDocs = null;
-        try {
-            trDocs = getDocumentsRelatedTo(document).get(TemConstants.TravelDocTypes.TRAVEL_REIMBURSEMENT_DOCUMENT);
+        
+        List<Document> relatedTravelReimbursementDocuments = getDocumentsRelatedTo(document, TravelDocTypes.TRAVEL_REIMBURSEMENT_DOCUMENT);
+        for(Document trDoc: relatedTravelReimbursementDocuments) {
+            List<AccountingLine> lines = ((TravelReimbursementDocument)trDoc).getSourceAccountingLines();
+            for(AccountingLine line: lines) {
+                trTotal = trTotal.add(line.getAmount());
+            }
         }
-        catch (WorkflowException ex) {
-            ex.printStackTrace();
-        }
-        if(trDocs != null && trDocs.size() > 0) {
-            for(Document trDoc: trDocs) {
-                List<AccountingLine> lines = ((TravelReimbursementDocument)trDoc).getSourceAccountingLines();
-                for(AccountingLine line: lines) {
-                    trTotal = trTotal.add(line.getAmount());
-                }
-                
-            } 
-        }
-        if (document.getDocumentHeader().getWorkflowDocument().getDocumentType().equals(TemConstants.TravelDocTypes.TRAVEL_REIMBURSEMENT_DOCUMENT)){
+        
+        if (document.getDocumentHeader().getWorkflowDocument().getDocumentType().equals(TravelDocTypes.TRAVEL_REIMBURSEMENT_DOCUMENT)){
             List<AccountingLine> lines = document.getSourceAccountingLines();
             for(AccountingLine line: lines) {
                 trTotal = trTotal.add(line.getAmount());
@@ -1445,6 +1447,182 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
         }
 
         return sb.toString();
+    }
+        /**
+     *
+     * This method imports the file and convert it to a list of objects (of the class specified in the parameter)
+     * @param formFile
+     * @param c
+     * @param attributeNames
+     * @param tabErrorKey
+     * @return
+     */
+    //TODO: re-evaluate KUALITEM-954 in regards to defaultValues and attributeMaxLength. Validation should not happen at parsing (these param are only used by importAttendees in TravelEntertainmentAction).
+    public List<Object> importFile(final String fileContents, Class<?> c, String[] attributeNames, Map<String, List<String>> defaultValues, Integer[] attributeMaxLength, String tabErrorKey) {
+        if(attributeMaxLength != null && attributeNames.length != attributeMaxLength.length){
+            throw new UploadParserException("Invalid parser configuration, the number of attribute names and attribute max length should be the same");
+        }
+
+        return importFile(fileContents, c, attributeNames, defaultValues, attributeMaxLength, tabErrorKey, getDefaultAcceptableFileExtensions());
+    }
+    
+    /**
+     *
+     * This method imports the file and convert it to a list of objects (of the class specified in the parameter)
+     * @param formFile
+     * @param c
+     * @param attributeNames
+     * @param tabErrorKey
+     * @param fileExtensions
+     * @return
+     */
+    public List<Object> importFile(final String fileContents, Class<?> c, String[] attributeNames,Map<String, List<String>> defaultValues, Integer[] attributeMaxLength, String tabErrorKey, List<String> fileExtensions) {
+        final List<Object> importedObjects = new ArrayList<Object>();
+
+        // parse file line by line
+        Integer lineNo = 0;
+        boolean failed = false;
+        for (final String line : fileContents.split("\n")) {
+            lineNo++;
+            try {
+                final Object o = parseLine(line, c, attributeNames, defaultValues, attributeMaxLength, lineNo, tabErrorKey);
+                importedObjects.add(o);
+            }
+            catch (UploadParserException e) {
+                // continue to parse the rest of the lines after the current line fails
+                // error messages are already dealt with inside parseFile, so no need to do anything here
+                failed = true;
+            }
+        }
+
+        if (failed) {
+            throw new UploadParserException("errors in parsing lines in file ", ERROR_UPLOADPARSER_LINE, null);
+        }
+
+        return importedObjects;
+    }
+    
+    /**
+     *
+     * This method parses a CSV line
+     * @param line
+     * @param c
+     * @param attributeNames
+     * @param lineNo
+     * @param tabErrorKey
+     * @return
+     */
+    protected PersistableBusinessObject parseLine(String line, Class<?> c, String[] attributeNames,Map<String, List<String>> defaultValues, Integer[] attributeMaxLength, Integer lineNo, String tabErrorKey) {
+        final Map<String, String> objectMap = retrieveObjectAttributes(line, attributeNames, defaultValues, attributeMaxLength, lineNo, tabErrorKey);
+        final PersistableBusinessObject obj = (PersistableBusinessObject) genObjectWithRetrievedAttributes(objectMap, c, lineNo, tabErrorKey);
+        obj.refresh();
+        return obj;
+    }
+    
+    /**
+     *
+     * This method generates an object instance and populates it with the specified attribute map.
+     * @param objectMap
+     * @param c
+     * @param lineNo
+     * @param tabErrorKey
+     * @return
+     */
+    protected static Object genObjectWithRetrievedAttributes(Map<String, String> objectMap, Class<?> c, Integer lineNo, String tabErrorKey) {
+        Object object;
+        try {
+            object = c.newInstance();
+        }
+        catch (Exception e) {
+            throw new InfrastructureException("unable to complete line population.", e);
+        }
+
+        boolean failed = false;
+        for (final Map.Entry<String, String> entry : objectMap.entrySet()) {
+            try {
+                try {
+                    ObjectUtils.setObjectProperty(object, entry.getKey(), entry.getValue());
+                }
+                catch (FormatException e) {
+                    String[] errorParams = { entry.getValue(), entry.getKey(), "" + lineNo };
+                    throw new UploadParserException("invalid numeric property value: " 
+                            + entry.getKey() + " = " + entry.getValue() + " (line " + lineNo + ")", ERROR_UPLOADPARSER_INVALID_NUMERIC_VALUE, errorParams);
+                }
+            }
+            catch (UploadParserException e) {
+                // continue to parse the rest of the properties after the current property fails
+                GlobalVariables.getMessageMap().putError(tabErrorKey, e.getErrorKey(), e.getErrorParameters());
+                failed = true;
+            }
+            catch (Exception e) {
+                throw new InfrastructureException("unable to complete line population.", e);
+            }
+        }
+
+        if (failed) {
+            throw new UploadParserException("empty or invalid properties in line " + lineNo + ")", ERROR_UPLOADPARSER_PROPERTY, ""+lineNo);
+        }
+        return object;
+    }
+    
+    /**
+     *
+     * This method retrieves the attributes as key-value string pairs into a map.
+     * @param line
+     * @param attributeNames
+     * @param lineNo
+     * @param tabErrorKey
+     * @return
+     */
+    protected Map<String, String> retrieveObjectAttributes(String line,
+                                                           String[] attributeNames,
+                                                           Map<String, List<String>> defaultValues,
+                                                           Integer[] attributeMaxLength,
+                                                           Integer lineNo, String tabErrorKey) {
+        String[] attributeValues = StringUtils.splitPreserveAllTokens(line, ',');
+        if (attributeNames.length != attributeValues.length) {
+            String[] errorParams = { "" + attributeNames.length, "" + attributeValues.length, "" + lineNo };
+            GlobalVariables.getMessageMap().putError(tabErrorKey, ERROR_UPLOADPARSER_WRONG_PROPERTY_NUMBER, errorParams);
+            throw new UploadParserException("wrong number of properties: " + attributeValues.length + " exist, " + attributeNames.length + " expected (line " + lineNo + ")", ERROR_UPLOADPARSER_WRONG_PROPERTY_NUMBER, errorParams);
+        }
+
+        for (int i = 0; i < attributeNames.length; i++) {
+            if (defaultValues != null && defaultValues.get(attributeNames[i]) != null) {
+                List<String> defaultValue = defaultValues.get(attributeNames[i]);
+                boolean found = false;
+                for (String value : defaultValue) {
+                    if (attributeValues[i].equalsIgnoreCase(value))
+                        found = true;
+                }
+                if (!found) {
+                    GlobalVariables.getMessageMap().putWarning(tabErrorKey, MESSAGE_UPLOADPARSER_INVALID_VALUE, attributeNames[i], attributeValues[i], (" " + lineNo));
+                    throw new UploadParserException("Invalid value " + attributeValues[i] + " exist, " + "in line (" + lineNo + ")", ERROR_UPLOADPARSER_WRONG_PROPERTY_NUMBER);
+                }
+            }
+
+            if (attributeMaxLength != null) {
+                if (attributeValues[i] != null && attributeValues[i].length() > attributeMaxLength[i]) {
+                    attributeValues[i] = attributeValues[i].substring(0, attributeMaxLength[i]);
+                    String[] errorParams = { "" + attributeNames[i], "" + attributeMaxLength[i], "" + lineNo };
+                    GlobalVariables.getMessageMap().putWarning(tabErrorKey, MESSAGE_UPLOADPARSER_EXCEEDED_MAX_LENGTH, errorParams);
+                }
+            }
+        }
+
+        Map<String, String> objectMap = new HashMap<String, String>();
+        for (int i = 0; i < attributeNames.length; i++) {
+            objectMap.put(attributeNames[i], attributeValues[i]);
+        }
+
+        return objectMap;
+    }
+    
+    /**
+     * 
+     */
+    @Override
+    public void importGroupTravelers(final TravelDocument document, final String csvData) {
+        
     }
     
     /**
@@ -1835,25 +2013,11 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
      */
     @Override
     public void revertOriginalDocument(TravelDocument travelDocument, String status) {
-        Map<String, List<Document>> relatedDocs = new HashMap<String, List<Document>>();
-        try {
-            relatedDocs = getDocumentsRelatedTo(travelDocument);
-        }
-        catch (WorkflowException ex1) {
-            ex1.printStackTrace();
-        }
-        List<Document> taDocs = relatedDocs.get(TravelDocTypes.TRAVEL_AUTHORIZATION_DOCUMENT);
-        List<Document> taaDocs = relatedDocs.get(TravelDocTypes.TRAVEL_AUTHORIZATION_AMEND_DOCUMENT);
+        
+        List<Document> relatedDocumentList = getDocumentsRelatedTo(travelDocument, TravelDocTypes.TRAVEL_AUTHORIZATION_DOCUMENT,
+                TravelDocTypes.TRAVEL_AUTHORIZATION_AMEND_DOCUMENT);
 
-        if (taDocs == null) {
-            taDocs = new ArrayList<Document>();
-        }
-
-        if (taaDocs != null) {
-            taDocs.addAll(taaDocs);
-        }
-
-        for (Document taDocument : taDocs) {
+        for (Document taDocument : relatedDocumentList) {
             if (taDocument.getDocumentHeader().getWorkflowDocument().getRouteHeader().getAppDocStatus().equals(TravelAuthorizationStatusCodeKeys.PEND_AMENDMENT)) {
                 TravelAuthorizationDocument taDoc = (TravelAuthorizationDocument) taDocument;
                 taDoc.updateAppDocStatus(status);
@@ -1973,4 +2137,12 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
     }
 
     public void adjustEncumbranceForAmendment(final TravelDocument taDocument) {}
+    
+    public List<String> getDefaultAcceptableFileExtensions() {
+        return defaultAcceptableFileExtensions;
+    }
+    
+    public void setDefaultAcceptableFileExtensions(final List<String> defaultAcceptableFileExtensions) {
+        this.defaultAcceptableFileExtensions = defaultAcceptableFileExtensions;
+    }
 }

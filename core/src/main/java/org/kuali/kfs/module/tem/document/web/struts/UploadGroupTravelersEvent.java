@@ -15,7 +15,7 @@
  */
 package org.kuali.kfs.module.tem.document.web.struts;
 
-import static org.kuali.kfs.module.tem.util.BufferedLogger.debug;
+import static org.kuali.kfs.module.tem.util.BufferedLogger.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +66,9 @@ public class UploadGroupTravelersEvent implements Observer {
         
         final String tabErrorKey = "groupTraveler";
         try {
-                final List<GroupTraveler> importedGroupTravelers = new ArrayList<GroupTraveler>();
-                /*UploadParser.importFile(wrapper.getGroupTravelerImportFile(), 
+            final List<GroupTraveler> importedGroupTravelers = new ArrayList<GroupTraveler>();
+            info("Getting ready to parse import file");
+            /*UploadParser.importFile(wrapper.getGroupTravelerImportFile(), 
                                                             GroupTraveler.class, 
                                                             GROUP_TRAVELER_ATTRIBUTE_NAMES, 
                                                             null, null, tabErrorKey);*/
