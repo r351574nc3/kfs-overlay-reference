@@ -1469,7 +1469,7 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
      * @return
      */
     //TODO: re-evaluate KUALITEM-954 in regards to defaultValues and attributeMaxLength. Validation should not happen at parsing (these param are only used by importAttendees in TravelEntertainmentAction).
-    public List<Object> importFile(final String fileContents, Class<?> c, String[] attributeNames, Map<String, List<String>> defaultValues, Integer[] attributeMaxLength, String tabErrorKey) {
+    public <T> List<T> importFile(final String fileContents, Class<T> c, String[] attributeNames, Map<String, List<String>> defaultValues, Integer[] attributeMaxLength, String tabErrorKey) {
         if(attributeMaxLength != null && attributeNames.length != attributeMaxLength.length){
             throw new UploadParserException("Invalid parser configuration, the number of attribute names and attribute max length should be the same");
         }
@@ -1487,8 +1487,8 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
      * @param fileExtensions
      * @return
      */
-    public List<Object> importFile(final String fileContents, Class<?> c, String[] attributeNames,Map<String, List<String>> defaultValues, Integer[] attributeMaxLength, String tabErrorKey, List<String> fileExtensions) {
-        final List<Object> importedObjects = new ArrayList<Object>();
+    public <T> List<T> importFile(final String fileContents, Class<T> c, String[] attributeNames,Map<String, List<String>> defaultValues, Integer[] attributeMaxLength, String tabErrorKey, List<String> fileExtensions) {
+        final List<T> importedObjects = new ArrayList<T>();
 
         // parse file line by line
         Integer lineNo = 0;
@@ -1496,7 +1496,7 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
         for (final String line : fileContents.split("\n")) {
             lineNo++;
             try {
-                final Object o = parseLine(line, c, attributeNames, defaultValues, attributeMaxLength, lineNo, tabErrorKey);
+                final T o = parseLine(line, c, attributeNames, defaultValues, attributeMaxLength, lineNo, tabErrorKey);
                 importedObjects.add(o);
             }
             catch (UploadParserException e) {
@@ -1523,10 +1523,10 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
      * @param tabErrorKey
      * @return
      */
-    protected PersistableBusinessObject parseLine(String line, Class<?> c, String[] attributeNames,Map<String, List<String>> defaultValues, Integer[] attributeMaxLength, Integer lineNo, String tabErrorKey) {
+    protected <T> T parseLine(String line, Class<T> c, String[] attributeNames,Map<String, List<String>> defaultValues, Integer[] attributeMaxLength, Integer lineNo, String tabErrorKey) {
         final Map<String, String> objectMap = retrieveObjectAttributes(line, attributeNames, defaultValues, attributeMaxLength, lineNo, tabErrorKey);
-        final PersistableBusinessObject obj = (PersistableBusinessObject) genObjectWithRetrievedAttributes(objectMap, c, lineNo, tabErrorKey);
-        obj.refresh();
+        final T obj = genObjectWithRetrievedAttributes(objectMap, c, lineNo, tabErrorKey);
+        ((PersistableBusinessObject) obj).refresh();
         return obj;
     }
     
@@ -1539,10 +1539,11 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
      * @param tabErrorKey
      * @return
      */
-    protected static Object genObjectWithRetrievedAttributes(Map<String, String> objectMap, Class<?> c, Integer lineNo, String tabErrorKey) {
-        Object object;
+    protected <T> T genObjectWithRetrievedAttributes(final Map<String, String> objectMap, 
+                                                             final Class<T> c, final Integer lineNo, final String tabErrorKey) {
+        T object;
         try {
-            object = c.newInstance();
+            object = (T) c.newInstance();
         }
         catch (Exception e) {
             throw new InfrastructureException("unable to complete line population.", e);
@@ -1733,6 +1734,11 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
             
         for (final String[] row : rows) {
             final GroupTravelerCsvRecord record = createGroupTravelerCsvRecord(header, row);
+            final GroupTraveler traveler = new GroupTraveler();
+            traveler.setGroupTravelerEmpId(record.getGroupTravelerEmpId());
+            traveler.setName(record.getName());
+            traveler.setTravelerTypeCode(record.getTravelerTypeCode());
+            retval.add(traveler);
         }
 
         return retval;

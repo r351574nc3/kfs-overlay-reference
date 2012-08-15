@@ -47,7 +47,6 @@ public class UploadGroupTravelersEvent implements Observer {
     private static final int WRAPPER_ARG_IDX       = 0;
     private static final int FILE_CONTENTS_ARG_IDX = 1;
     protected static final String[] GROUP_TRAVELER_ATTRIBUTE_NAMES = { "travelerTypeCode", "groupTravelerEmpId", "name" };
-
     
     protected TravelDocumentService travelDocumentService;
     protected KualiRuleService ruleService;
@@ -97,11 +96,11 @@ public class UploadGroupTravelersEvent implements Observer {
      * 
      * @return Returns the travelReimbursementService.
      */
-    protected TravelDocumentService getTravelDocumentService() {
+    public TravelDocumentService getTravelDocumentService() {
         return travelDocumentService;
     }
     
-    protected void setTravelDocumentService(final TravelDocumentService travelDocumentService) {
+    public void setTravelDocumentService(final TravelDocumentService travelDocumentService) {
         this.travelDocumentService = travelDocumentService;
     }
 
@@ -110,11 +109,11 @@ public class UploadGroupTravelersEvent implements Observer {
      * 
      * @return Returns the kualiRuleseService.
      */
-    protected KualiRuleService getRuleService() {
+    public KualiRuleService getRuleService() {
         return ruleService;
     }
     
-    protected void setRuleService(final KualiRuleService ruleService) {
+    public void setRuleService(final KualiRuleService ruleService) {
         this.ruleService = ruleService;
     }
 }

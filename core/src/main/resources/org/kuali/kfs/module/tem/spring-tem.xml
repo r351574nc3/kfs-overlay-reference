@@ -1348,7 +1348,11 @@
     
     <!-- CSV Refactory Stuff -->
     <bean id="groupTravelerCsvRecordFactory" class="org.kuali.kfs.module.tem.service.CsvRecordFactory">
-      <constructor-arg type="java.lang.Class" value="org.kuai.kfs.module.tem.businessobject.GroupTravelerCsvRecord" />
+      <constructor-arg type="java.lang.Class">
+        <bean class="java.lang.Class" factory-method="forName">
+           <constructor-arg value="org.kuali.kfs.module.tem.businessobject.GroupTravelerCsvRecord"/>
+        </bean>
+      </constructor-arg>
       <property name="headerMap">
         <map>
             <entry key="travelerTypeCode"    value="travelerTypeCode" />

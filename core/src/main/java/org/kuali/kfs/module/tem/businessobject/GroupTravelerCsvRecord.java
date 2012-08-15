@@ -27,4 +27,9 @@ import java.util.Map;
  * @author Leo Przybylski (leo [at] rsmart.com)
  */
 public interface GroupTravelerCsvRecord  {
+    String getTravelerTypeCode();
+    
+    String getName();
+    
+    String getGroupTravelerEmpId();        
 }
