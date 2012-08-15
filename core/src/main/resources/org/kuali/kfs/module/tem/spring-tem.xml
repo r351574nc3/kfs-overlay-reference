@@ -486,6 +486,7 @@
                 <value>csv</value>
             </list>
         </property>
+        <property name="csvRecordFactory" ref="groupTravelerCsvRecordFactory" />
 	</bean>
   
     <bean id="travelDisbursementService" parent="travelDisbursementService-parentBean" />
@@ -1342,5 +1343,18 @@
 		<property name="travelDocumentService" ref="temTravelDocumentService" />
 		<property name="travelerService" ref="travelerService" />
 		<property name="accountingDocumentRelationshipService" ref="temAccountingDocumentRelationshipService" />
+    </bean>
+    
+    
+    <!-- CSV Refactory Stuff -->
+    <bean id="groupTravelerCsvRecordFactory" class="org.kuali.kfs.module.tem.service.CsvRecordFactory">
+      <constructor-arg type="java.lang.Class" value="org.kuai.kfs.module.tem.businessobject.GroupTravelerCsvRecord" />
+      <property name="headerMap">
+        <map>
+            <entry key="travelerTypeCode"    value="travelerTypeCode" />
+            <entry key="groupTravelerEmplId" value="groupTravelerEmplId" />
+            <entry key="name"                value="name" />
+        </map>
+      </property>
     </bean>
 </beans>

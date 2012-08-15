@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kuali.kfs.module.tem.service.impl;
+package org.kuali.kfs.module.tem.service;
 
 import static org.kuali.kfs.module.tem.util.BufferedLogger.*;
 import static org.apache.commons.lang.StringUtils.isBlank;

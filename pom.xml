@@ -75,6 +75,7 @@ limitations under the License.
     <maven-resources-plugin.version>2.5</maven-resources-plugin.version>
     <maven-scm-providers-git.version>1.6</maven-scm-providers-git.version>
     <mysql-connector-java.version>5.1.16</mysql-connector-java.version>
+    <opencsv.version>2.3</opencsv.version>
     <org.eclipse.jgit.version>2.0.0.201206130900-r</org.eclipse.jgit.version>
     <ojdbc6.version>11.2.0.2</ojdbc6.version>
     <rice.version>1.0.3</rice.version>
@@ -151,6 +152,11 @@ limitations under the License.
   
   <dependencyManagement>
     <dependencies>
+        <dependency>
+            <groupId>net.sf.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>${opencsv.version}</version>
+        </dependency>
         <dependency>
            <groupId>jasperreports</groupId>
            <artifactId>jasperreports</artifactId>

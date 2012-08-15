@@ -15,6 +15,7 @@
  */
 package org.kuali.kfs.module.tem.document.web.struts;
 
+import static org.kuali.kfs.sys.KFSKeyConstants.ERROR_UPLOADFILE_NULL;
 import static org.kuali.kfs.module.tem.util.BufferedLogger.*;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ import org.kuali.rice.kns.util.GlobalVariables;
  */
 public class UploadGroupTravelersEvent implements Observer {
     private static final int WRAPPER_ARG_IDX       = 0;
-    private static final int SELECTED_LINE_ARG_IDX = 1;
+    private static final int FILE_CONTENTS_ARG_IDX = 1;
     protected static final String[] GROUP_TRAVELER_ATTRIBUTE_NAMES = { "travelerTypeCode", "groupTravelerEmpId", "name" };
 
     
@@ -62,17 +63,12 @@ public class UploadGroupTravelersEvent implements Observer {
             return;
         }
         final TravelMvcWrapperBean wrapper = (TravelMvcWrapperBean) args[WRAPPER_ARG_IDX];
+        final String fileContents          = (String) args[FILE_CONTENTS_ARG_IDX];
         final TravelDocument document = wrapper.getTravelDocument();
         
         final String tabErrorKey = "groupTraveler";
         try {
-            final List<GroupTraveler> importedGroupTravelers = new ArrayList<GroupTraveler>();
-            info("Getting ready to parse import file");
-            /*UploadParser.importFile(wrapper.getGroupTravelerImportFile(), 
-                                                            GroupTraveler.class, 
-                                                            GROUP_TRAVELER_ATTRIBUTE_NAMES, 
-                                                            null, null, tabErrorKey);*/
-            // importedGroupTraveler = UploadParser.importFile(reqForm.getGroupTravelerImportFile(), GroupTraveler.class, GROUP_TRAVELER_ATTRIBUTE_NAMES, tabErrorKey);
+            final List<GroupTraveler> importedGroupTravelers = getTravelDocumentService().importGroupTravelers(document, fileContents);
             
             // validate imported items
             boolean allPassed = true;
@@ -80,8 +76,6 @@ public class UploadGroupTravelersEvent implements Observer {
             for (final GroupTraveler traveler : importedGroupTravelers) {
                 final AddGroupTravelLineEvent event = new AddGroupTravelLineEvent("newGroupTravelerLine", document, traveler);
                 allPassed &= getRuleService().applyRules(event);
-
-
             }
             if (allPassed) {
                 for (final GroupTraveler traveler : importedGroupTravelers) {
@@ -89,8 +83,11 @@ public class UploadGroupTravelersEvent implements Observer {
                 }
             }
         }
-        catch (UploadParserException e) {
-            GlobalVariables.getMessageMap().putError(tabErrorKey, e.getErrorKey(), e.getErrorParameters());
+        catch (Exception e) {
+            if (logger().isDebugEnabled()) {
+                e.printStackTrace();
+            }
+            GlobalVariables.getMessageMap().putError(tabErrorKey, ERROR_UPLOADFILE_NULL);
         }
     }
   
