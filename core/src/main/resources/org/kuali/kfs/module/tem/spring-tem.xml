@@ -481,12 +481,6 @@
 		<property name="stateService" ref="stateService" />
 		<property name="persistenceStructureService" ref="persistenceStructureService"/>
 		<property name="universityDateService" ref="universityDateService" />
-        <property name="defaultAcceptableFileExtensions">
-            <list>
-                <value>csv</value>
-            </list>
-        </property>
-        <property name="csvRecordFactory" ref="groupTravelerCsvRecordFactory" />
 	</bean>
   
     <bean id="travelDisbursementService" parent="travelDisbursementService-parentBean" />
@@ -656,19 +650,6 @@
     </bean>
     <bean id="removeAttendeeEvent" class="org.kuali.kfs.module.tem.document.web.struts.RemoveAttendeeEvent">
     </bean>
-    
-    <bean id="uploadGroupTravelersEvent" class="org.kuali.kfs.module.tem.document.web.struts.UploadGroupTravelersEvent">
-        <property name="travelDocumentService" ref="temTravelDocumentService" />        
-    </bean>
-
-<!-- Not sure if I need these
-    <bean id="addGroupTravelerEvent" class="org.kuali.kfs.module.tem.document.web.struts.AddGroupTravelerEvent">
-    </bean>
-    
-    <bean id="removeGroupTravelerEvent" class="org.kuali.kfs.module.tem.document.web.struts.RemoveGroupTravelerEvent">
-    </bean>
-    -->
-    
     
 	<bean id="temBatchService" parent="temBatchService-parentBean" />
 	<bean id="temBatchService-parentBean" class="org.kuali.kfs.module.tem.batch.service.impl.TemBatchServiceImpl">
@@ -1065,6 +1046,7 @@
 		<property name="temBatchService" ref="temBatchService"/>
 		<property name="temProfileService" ref="temProfileService" />
 		<property name="travelExpenseService" ref="travelExpenseService" />
+        <property name="creditCardAgencyService" ref="creditCardAgencyService" />
 		<property name="dateTimeService" ref="dateTimeService" />
 		<property name="creditCardDataFileErrorDirectory" value="${staging.directory}/tem/creditCardData/error" />
 		<property name="creditCardDataImportFileTypes">
@@ -1156,11 +1138,6 @@
 				<entry key="deleteDistributionLine">
 					<list>
 						<ref bean="deleteDistributionAccountingLineEvent" />
-					</list>
-				</entry>
-    			<entry key="uploadGroupTravelerImportFile">
-					<list>
-						<ref bean="uploadGroupTravelersEvent" />
 					</list>
 				</entry>
 			</map>
@@ -1343,22 +1320,5 @@
 		<property name="travelDocumentService" ref="temTravelDocumentService" />
 		<property name="travelerService" ref="travelerService" />
 		<property name="accountingDocumentRelationshipService" ref="temAccountingDocumentRelationshipService" />
-    </bean>
-    
-    
-    <!-- CSV Refactory Stuff -->
-    <bean id="groupTravelerCsvRecordFactory" class="org.kuali.kfs.module.tem.service.CsvRecordFactory">
-      <constructor-arg type="java.lang.Class">
-        <bean class="java.lang.Class" factory-method="forName">
-           <constructor-arg value="org.kuali.kfs.module.tem.businessobject.GroupTravelerCsvRecord"/>
-        </bean>
-      </constructor-arg>
-      <property name="headerMap">
-        <map>
-            <entry key="travelerTypeCode"    value="travelerTypeCode" />
-            <entry key="groupTravelerEmplId" value="groupTravelerEmplId" />
-            <entry key="name"                value="name" />
-        </map>
-      </property>
     </bean>
 </beans>

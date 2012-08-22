@@ -34,7 +34,6 @@ import org.kuali.kfs.module.tem.dataaccess.TravelDocumentDao;
 import org.kuali.kfs.module.tem.document.TravelAuthorizationDocument;
 import org.kuali.kfs.module.tem.document.TravelDocument;
 import org.kuali.kfs.module.tem.document.TravelReimbursementDocument;
-import org.kuali.kfs.module.tem.service.CsvRecordFactory;
 import org.kuali.kfs.sys.businessobject.FinancialSystemDocumentHeader;
 import org.kuali.rice.core.util.KeyLabelPair;
 import org.kuali.rice.kew.exception.WorkflowException;
@@ -384,8 +383,6 @@ public interface TravelDocumentService {
      */
     void trimFinancialSystemDocumentHeader(FinancialSystemDocumentHeader header);
 
-    void adjustEncumbranceForAmendment(TravelDocument taDocument);
-
     /**
      * Import {@link GroupTraveler} instances into a {@link TravelDocument} via CSV data
      * 
@@ -394,9 +391,4 @@ public interface TravelDocumentService {
      *  @throws Exception when there's an error parsing the CSV data
      */
     List<GroupTraveler> importGroupTravelers(final TravelDocument document, final String csvData) throws Exception;
-    
-    void setCsvRecordFactory(final CsvRecordFactory recordFactory);
-
-    CsvRecordFactory getCsvRecordFactory();
-    
 }

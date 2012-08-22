@@ -87,6 +87,8 @@ limitations under the License.
 
     <jetty.phase>none</jetty.phase>
     <jrebel.phase>none</jrebel.phase>
+    <rebel.home>${user.home}/jrebel/</rebel.home>
+    <rebel.root>${basedir}/../</rebel.root>
     <kfs.maven.groupId>org.kualigan.kfs</kfs.maven.groupId>
     <kfs.maven.version>4.1.1-7</kfs.maven.version>
     <kfs.external.unpack.phase>none</kfs.external.unpack.phase>

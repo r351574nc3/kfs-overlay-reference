@@ -20,12 +20,9 @@ import static org.kuali.kfs.module.tem.TemKeyConstants.AGENCY_SITES_URL;
 import static org.kuali.kfs.module.tem.TemKeyConstants.ENABLE_AGENCY_SITES_URL;
 import static org.kuali.kfs.module.tem.TemKeyConstants.PASS_TRIP_ID_TO_AGENCY_SITES;
 import static org.kuali.kfs.module.tem.util.BufferedLogger.debug;
-import static org.kuali.kfs.module.tem.util.BufferedLogger.error;
-import static org.kuali.kfs.module.tem.util.BufferedLogger.logger;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,7 +37,6 @@ import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang.StringUtils;
@@ -74,6 +70,8 @@ import org.kuali.kfs.module.tem.businessobject.TravelerType;
 import org.kuali.kfs.module.tem.businessobject.TripType;
 import org.kuali.kfs.module.tem.document.service.TravelDisbursementService;
 import org.kuali.kfs.module.tem.document.service.TravelDocumentService;
+import org.kuali.kfs.module.tem.document.service.TravelEncumbranceService;
+import org.kuali.kfs.module.tem.document.service.TravelReimbursementService;
 import org.kuali.kfs.module.tem.service.AccountingDistributionService;
 import org.kuali.kfs.module.tem.service.PerDiemService;
 import org.kuali.kfs.module.tem.service.TravelDocumentNotificationService;
@@ -166,6 +164,14 @@ public abstract class TravelDocumentBase extends AccountingDocumentBase implemen
     protected TravelDisbursementService getTravelDisbursementService() {
         return SpringContext.getBean(TravelDisbursementService.class);
     }
+    
+    protected TravelEncumbranceService getTravelEncumbranceService() {
+        return SpringContext.getBean(TravelEncumbranceService.class);
+    }
+    
+    protected TravelReimbursementService getTravelReimbursementService() {
+        return SpringContext.getBean(TravelReimbursementService.class);
+    }
 
     protected ParameterService getParameterService() {
         return SpringContext.getBean(ParameterService.class);
@@ -208,6 +214,7 @@ public abstract class TravelDocumentBase extends AccountingDocumentBase implemen
      * 
      * @param status
      */
+    @Override
     public void updateAppDocStatus(String newStatus) {
         debug("new status is: " + newStatus);
 
@@ -687,7 +694,7 @@ public abstract class TravelDocumentBase extends AccountingDocumentBase implemen
         setPerDiemExpenses(getTravelDocumentService().copyPerDiemExpenses(getPerDiemExpenses(), getDocumentNumber()));
         setSpecialCircumstances(getTravelDocumentService().copySpecialCircumstances(this.getSpecialCircumstances(), getDocumentNumber()));
         setTraveler(getTravelerService().copyTravelerDetail(getTraveler(), getDocumentNumber()));
-        setGroupTravelers(getTravelDocumentService().copyGroupTravelers(getGroupTravelers(), getDocumentNumber()));
+        setGroupTravelers(getTravelDocumentService().copyGroupTravelers(getGroupTravelers(), getDocumentNumber()));               
         setActualExpenses((List<ActualExpense>) getTravelDocumentService().copyActualExpenses(getActualExpenses(), getDocumentNumber()));
         setImportedExpenses(new ArrayList<ImportedExpense>());
 
@@ -705,53 +712,6 @@ public abstract class TravelDocumentBase extends AccountingDocumentBase implemen
         this.getTraveler().setId(null);
         this.getDocumentHeader().setOrganizationDocumentNumber("");
         this.getDocumentHeader().setDocumentDescription(TemConstants.PRE_FILLED_DESCRIPTION);
-    }
-
-    /**
-     * 
-     * @return
-     */
-    protected String getSpecialCircumstancesSequenceName() {
-        Class<?> boClass = SpecialCircumstances.class;
-        String retval = "";
-        try {
-            boolean rethrow = true;
-            Exception e = null;
-            while (rethrow) {
-                debug("Looking for id in ", boClass.getName());
-                try {
-                    final Field idField = boClass.getDeclaredField("id");
-                    final SequenceGenerator sequenceInfo = idField.getAnnotation(SequenceGenerator.class);
-                    
-                    return sequenceInfo.sequenceName();
-                }
-                catch (Exception ee) {
-                    // ignore and try again
-                    debug("Could not find id in ", boClass.getName());
-                    
-                    // At the end. Went all the way up the hierarchy until we got to Object
-                    if (Object.class.equals(boClass)) {
-                        rethrow = false;
-                    }
-                    
-                    // get the next superclass
-                    boClass = boClass.getSuperclass();
-                    e = ee;
-                }
-            }
-            
-            if (e != null) {
-                throw e;
-            }
-        }
-        catch (Exception e) {
-            error("Could not get the sequence name for business object ", SpecialCircumstances.class.getSimpleName());
-            error(e.getMessage());
-            if (logger().isDebugEnabled()) {
-                e.printStackTrace();
-            }
-        }
-        return retval;
     }
     
     /**
@@ -1244,9 +1204,9 @@ public abstract class TravelDocumentBase extends AccountingDocumentBase implemen
      * @param traveler
      */
     public void configureTraveler(Integer temProfileId, TravelerDetail traveler) {
-
+        
         if (traveler != null && traveler.getId() != null) {
-            // There's a traveler, which means it needs to copy the traveler, rather than
+            // There's a traveler, which means it needs to copy the traveler, rather than 
             // setting it up from the profile, which is why setProfileId() is not called here.
             this.temProfileId = temProfileId;
             Map<String, Object> primaryKeys = new HashMap<String, Object>();
@@ -1583,15 +1543,10 @@ public abstract class TravelDocumentBase extends AccountingDocumentBase implemen
      * 
      * @param group traveler line
      */
-    public void addGroupTravelerLine(GroupTraveler traveler) {
-        final String sequenceName = traveler.getSequenceName();
-        // Because all expense types use the same sequence, it doesn't matter which class grabs the sequence
-        final Long sequenceNumber = getSequenceAccessorService().getNextAvailableSequenceNumber(sequenceName, GroupTraveler.class);
-        traveler.setId(sequenceNumber);
-        traveler.setDocumentNumber(this.documentNumber);
-        
-        getGroupTravelers().add(traveler);
-        notifyChangeListeners(new PropertyChangeEvent(this, "groupTravelers", null, traveler));
+    public void addGroupTravelerLine(GroupTraveler line) {
+        line.setFinancialDocumentLineNumber(this.groupTravelers.size() + 1);
+        line.setDocumentNumber(this.documentNumber);
+        this.groupTravelers.add(line);
     }
 
     /**
@@ -1808,10 +1763,10 @@ public abstract class TravelDocumentBase extends AccountingDocumentBase implemen
         fieldValues.put(TemPropertyConstants.TRIP_ID,this.getTravelDocumentIdentifier());
         historicalTravelExpenses = (List<HistoricalTravelExpense>) service.findMatchingOrderBy(HistoricalTravelExpense.class, fieldValues, TemPropertyConstants.TRANSACTION_POSTING_DATE, true);
         for (HistoricalTravelExpense historicalTravelExpense : historicalTravelExpenses){
-            historicalTravelExpense.refreshReferenceObject("creditCardAgency");
-            historicalTravelExpense.refreshReferenceObject("agencyStagingData");
-            historicalTravelExpense.refreshReferenceObject("creditCardStagingData");
-            historicalTravelExpense.getCreditCardAgency().refreshReferenceObject("creditCardType");
+            historicalTravelExpense.refreshReferenceObject(TemPropertyConstants.CREDIT_CARD_AGENCY);
+            historicalTravelExpense.refreshReferenceObject(TemPropertyConstants.AGENCY_STAGING_DATA);
+            historicalTravelExpense.refreshReferenceObject(TemPropertyConstants.CREDIT_CARD_STAGING_DATA);
+            historicalTravelExpense.getCreditCardAgency().refreshReferenceObject(TemPropertyConstants.TRAVEL_CARD_TYPE);
         }
         return historicalTravelExpenses;
     }
@@ -1975,5 +1930,15 @@ public abstract class TravelDocumentBase extends AccountingDocumentBase implemen
      */
     public boolean hasCustomDVDistribution(){
        return false;
-    }    
+    }
+    
+    /**
+     * Check trip type to determine if it should be generating encumbrance / dis-encumbrance
+     * 
+     * @return
+     */
+    public boolean isTripGenerateEncumbrance(){
+        return getTripType() != null && getTripType().isGenerateEncumbrance();
+    }
+   
 }

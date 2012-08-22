@@ -53,6 +53,8 @@ public interface TravelDocument extends AccountingDocument, TravelEntertainmentM
 
     void initiateDocument();
 
+    public void updateAppDocStatus(String newStatus);
+    
     @Override
     String getTravelDocumentIdentifier();
 
@@ -101,30 +103,30 @@ public interface TravelDocument extends AccountingDocument, TravelEntertainmentM
      */
     void setTripDescription(String tripDescription);
 
-    Integer getPrimaryDestinationId();
+    public Integer getPrimaryDestinationId();
 
-    void setPrimaryDestinationId(Integer primaryDestinationId);
+    public void setPrimaryDestinationId(Integer primaryDestinationId);
 
-    PrimaryDestination getPrimaryDestination();
+    public PrimaryDestination getPrimaryDestination();
 
-    void setPrimaryDestination(PrimaryDestination primaryDestination);
+    public void setPrimaryDestination(PrimaryDestination primaryDestination);
     
     @Override
-    String getPrimaryDestinationName();
+    public String getPrimaryDestinationName();
     
-    void setPrimaryDestinationName(String primaryDestinationName);
+    public void setPrimaryDestinationName(String primaryDestinationName);
     
-    String getPrimaryDestinationCountryState();
+    public String getPrimaryDestinationCountryState();
     
-    void setPrimaryDestinationCountryState(String primaryDestinationCountryState);
+    public void setPrimaryDestinationCountryState(String primaryDestinationCountryState);
     
-    String getPrimaryDestinationCounty();
+    public String getPrimaryDestinationCounty();
     
-    void setPrimaryDestinationCounty(String primaryDestinationCounty);
+    public void setPrimaryDestinationCounty(String primaryDestinationCounty);
     
-    Boolean getPrimaryDestinationIndicator();
+    public Boolean getPrimaryDestinationIndicator();
     
-    void setPrimaryDestinationIndicator(Boolean primaryDestinationIndicator);
+    public void setPrimaryDestinationIndicator(Boolean primaryDestinationIndicator);
     
     /**
      * This method returns the trip type associated with this Travel Request document
@@ -194,141 +196,141 @@ public interface TravelDocument extends AccountingDocument, TravelEntertainmentM
 
     List<PerDiemExpense> getPerDiemExpenses();
 
-    void setPerDiemExpenses(List<PerDiemExpense> perDiemExpenses);
+    public void setPerDiemExpenses(List<PerDiemExpense> perDiemExpenses);
 
-    KualiDecimal getEncumbranceTotal();
+    public KualiDecimal getEncumbranceTotal();
 
     void enableExpenseTypeSpecificFields(final List<ActualExpense> actualExpenses);
 
     KualiDecimal getTotalPendingAmount(ActualExpense actualExpense);
 
-    KualiDecimal getParentExpenseAmount(List<ActualExpense> actualExpenses, Long id);
+    public KualiDecimal getParentExpenseAmount(List<ActualExpense> actualExpenses, Long id);
 
-    KualiDecimal getTotalDetailExpenseAmount(ActualExpense actualExpense);
+    public KualiDecimal getTotalDetailExpenseAmount(ActualExpense actualExpense);
 
-    ActualExpense getParentExpenseRecord(List<ActualExpense> actualExpenses, Long id);
+    public ActualExpense getParentExpenseRecord(List<ActualExpense> actualExpenses, Long id);
 
-    KualiDecimal getActualExpensesTotal();
+    public KualiDecimal getActualExpensesTotal();
 
     void addActualExpense(final ActualExpense line);
 
     void removeActualExpense(final Integer index);
     
-    String getDelinquentAction();
+    public String getDelinquentAction();
     
-    boolean canDisplayAgencySitesUrl();
+    public boolean canDisplayAgencySitesUrl();
 
-    String getAgencySitesUrl();
+    public String getAgencySitesUrl();
     
-    boolean canPassTripIdToAgencySites();
+    public boolean canPassTripIdToAgencySites();
     
     /**
      * 
      * This method provides the same getter call for travel doc and tem profile's profileId.
      * @return
      */
-    Integer getProfileId();
+    public Integer getProfileId();
 
     /**
      * 
      * This method provides additional support to populate profile.
      * @return
      */
-    void setProfileId(Integer profileId);
+    public void setProfileId(Integer profileId);
     
-    Integer getTemProfileId();
+    public Integer getTemProfileId();
 
-    void setTemProfileId(Integer temProfileId);
+    public void setTemProfileId(Integer temProfileId);
 
-    TEMProfile getTemProfile();
+    public TEMProfile getTemProfile();
 
     /**
      * Sets the temProfile attribute value.
      * @param temProfile The temProfile to set.
      */
-    void setTemProfile(TEMProfile temProfile);
-    List<TransportationModeDetail> getTransportationModes();
+    public void setTemProfile(TEMProfile temProfile);
+    public List<TransportationModeDetail> getTransportationModes();
 
-    void setTransportationModes(List<TransportationModeDetail> transportationModes);
+    public void setTransportationModes(List<TransportationModeDetail> transportationModes);
     
-    List<GroupTraveler> getGroupTravelers();
+    public List<GroupTraveler> getGroupTravelers();
     
-    void setGroupTravelers(List<GroupTraveler> groupTravelers);
+    public void setGroupTravelers(List<GroupTraveler> groupTravelers);
     
-    List<TravelAdvance> getTravelAdvances();
+    public List<TravelAdvance> getTravelAdvances();
     
-    void setTravelAdvances(List<TravelAdvance> travelAdvances);
+    public void setTravelAdvances(List<TravelAdvance> travelAdvances);
     
-    List<ActualExpense> getActualExpenses();
+    public List<ActualExpense> getActualExpenses();
     
-    void setActualExpenses(List<ActualExpense> actualExpenses);
+    public void setActualExpenses(List<ActualExpense> actualExpenses);
     
-    List<ImportedExpense> getImportedExpenses();
+    public List<ImportedExpense> getImportedExpenses();
     
-    void setImportedExpenses(List<ImportedExpense> importedExpenses);
+    public void setImportedExpenses(List<ImportedExpense> importedExpenses);
     
-    KualiDecimal getTotalFor(final String financialObjectCode);
+    public KualiDecimal getTotalFor(final String financialObjectCode);
 
-    KualiDecimal getDocumentGrandTotal();
+    public KualiDecimal getDocumentGrandTotal();
     
-    KualiDecimal getDailyTotalGrandTotal();
+    public KualiDecimal getDailyTotalGrandTotal();
     
-    KualiDecimal getReimbursableTotal();
+    public KualiDecimal getReimbursableTotal();
     
-    KualiDecimal getNonReimbursableTotal();
+    public KualiDecimal getNonReimbursableTotal();
     
-    KualiDecimal getApprovedAmount();
+    public KualiDecimal getApprovedAmount();
     
-    void addExpense(TEMExpense line);
+    public void addExpense(TEMExpense line);
     
-    void addExpenseDetail(TEMExpense line, Integer index);
+    public void addExpenseDetail(TEMExpense line, Integer index);
 
     void removeExpense(TEMExpense line, Integer index);
     
     void removeExpenseDetail(TEMExpense line, Integer index);
     
-    KualiDecimal getCTSTotal();
+    public KualiDecimal getCTSTotal();
     
-    KualiDecimal getCorporateCardTotal();
+    public KualiDecimal getCorporateCardTotal();
     
-    AccountingDistributionService getAccountingDistributionService();
+    public AccountingDistributionService getAccountingDistributionService();
     
-    List<HistoricalTravelExpense> getHistoricalTravelExpenses();
+    public List<HistoricalTravelExpense> getHistoricalTravelExpenses();
 
-    void setHistoricalTravelExpenses(List<HistoricalTravelExpense> historicalTravelExpenses);
+    public void setHistoricalTravelExpenses(List<HistoricalTravelExpense> historicalTravelExpenses);
 
-    String getMealWithoutLodgingReason();   
+    public String getMealWithoutLodgingReason();   
     
-    String getDocumentTypeName();
+    public String getDocumentTypeName();
     
-    String getReportPurpose();
+    public String getReportPurpose();
     
-    void populateVendorPayment(DisbursementVoucherDocument disbursementVoucherDocument);
+    public void populateVendorPayment(DisbursementVoucherDocument disbursementVoucherDocument);
     
-    KualiDecimal getPerDiemAdjustment();
+    public KualiDecimal getPerDiemAdjustment();
 
-    void setPerDiemAdjustment(KualiDecimal perDiemAdjustment);
+    public void setPerDiemAdjustment(KualiDecimal perDiemAdjustment);
     
     /**
      * Populate the fields from the Travel document to create the DisbursementVoucherDocument
      * 
      * @param disbursementVoucherDocument
      */
-    void populateDisbursementVoucherFields(DisbursementVoucherDocument disbursementVoucherDocument);
+    public void populateDisbursementVoucherFields(DisbursementVoucherDocument disbursementVoucherDocument);
     
     /**
      * Return the source accounting lines which will be used for reimbursement in DV
      * 
      * @return
      */
-    List<SourceAccountingLine> getReimbursableSourceAccountingLines();
+    public List<SourceAccountingLine> getReimbursableSourceAccountingLines();
     
     /**
      * Return default card agency type in the source accounting line
      * 
      * @return
      */
-    String getDefaultAccountingLineCardAgencyType();
+    public String getDefaultAccountingLineCardAgencyType();
 
     /**
      * Return the expense type code by Travel Document
@@ -338,15 +340,15 @@ public interface TravelDocument extends AccountingDocument, TravelEntertainmentM
      * 
      * @return
      */
-    String getExpenseTypeCode();
+    public String getExpenseTypeCode();
 
     /**
      * Return true if the travel document has custom distribution for the DV doc
      * 
      * @return
      */
-    boolean hasCustomDVDistribution();
-
+    public boolean hasCustomDVDistribution();
+    
     /**
      * Adds a {@link GroupTraveler} instance to the {@link TravelDocument}. Handles all the
      * under-the-hood stuff like setting the documentnumber.

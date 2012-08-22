@@ -60,7 +60,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
 import org.apache.ojb.broker.PersistenceBrokerException;
 import org.kuali.kfs.fp.businessobject.DisbursementVoucherDocumentationLocation;
 import org.kuali.kfs.gl.service.EncumbranceService;
@@ -151,12 +150,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.transaction.annotation.Transactional;
 import au.com.bytecode.opencsv.CSVReader;
 
+
 /**
  * Travel Service Implementation
  */
 public class TravelDocumentServiceImpl implements TravelDocumentService {
-    
-    protected static Logger LOG = Logger.getLogger(TravelDocumentServiceImpl.class);
     
     protected DataDictionaryService dataDictionaryService;
     protected DocumentService documentService;
@@ -549,7 +547,7 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
             }
         }
         catch (WorkflowException ex) {
-            LOG.error(ex.getMessage(), ex);
+            error(ex.getMessage(), ex);
         }
         return relatedDocumentList;
     }
@@ -694,20 +692,22 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
         }
         
         // Add adhoc for initiator      
-        if(!adHocRoutePersonIds.contains(initiatorUserId)){
-            if(initiatorUserId != null){
-                Person finSysUser = SpringContext.getBean(PersonService.class).getPerson(initiatorUserId);
-                    if(finSysUser != null){
-                    AdHocRoutePerson recipient = buildAdHocRecipient(finSysUser.getPrincipalName(), actionRequested);       
-                    DocumentAuthorizer documentAuthorizer = SpringContext.getBean(DocumentHelperService.class).getDocumentAuthorizer(document);    
-                    if (documentAuthorizer.canReceiveAdHoc(document, finSysUser, actionRequested)) {               
+        if (!adHocRoutePersonIds.contains(initiatorUserId)) {
+            if (initiatorUserId != null) {
+                final Person finSysUser = SpringContext.getBean(PersonService.class).getPerson(initiatorUserId);
+                if (finSysUser != null) {
+                    final AdHocRoutePerson recipient = buildAdHocRecipient(finSysUser.getPrincipalName(), actionRequested);       
+                    final DocumentAuthorizer documentAuthorizer = SpringContext.getBean(DocumentHelperService.class).getDocumentAuthorizer(document);    
+                    if (documentAuthorizer.canReceiveAdHoc(document, finSysUser, actionRequested)) {
                         adHocRoutePersons.add(recipient);
                     }
-                }else{
-                    LOG.warn("finSysUser is null.");
                 }
-            }else{
-                LOG.warn("initiatorUserId is null.");
+                else {
+                    warn("finSysUser is null.");
+                }
+            }
+            else {
+                warn("initiatorUserId is null.");
             }
         }
     }
@@ -1069,8 +1069,9 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
             List<String> roleIds = new ArrayList<String>();
             roleIds.add(arrangerRoleId);
             return roleService.principalHasRole(user.getPrincipalId(), roleIds, null);
-        } catch(NullPointerException e){
-            LOG.error("NPE.", e);
+        } 
+        catch (NullPointerException e) {
+            error("NPE.", e);
         }
         
         return false;   
@@ -1102,11 +1103,12 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
 	            }
             }
             
-            if(roleService.principalHasRole(user.getPrincipalId(), roleIds, qualification)) {
+            if (roleService.principalHasRole(user.getPrincipalId(), roleIds, qualification)) {
             	return true;
             }
-        }catch(NullPointerException e){
-            LOG.error("NPE.", e);
+        }
+        catch (NullPointerException e) {
+            error("NPE.", e);
         }
         
         return false;   
@@ -1459,6 +1461,7 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
 
         return sb.toString();
     }
+    
         /**
      *
      * This method imports the file and convert it to a list of objects (of the class specified in the parameter)
@@ -1747,7 +1750,7 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
     protected GroupTravelerCsvRecord createGroupTravelerCsvRecord(final Map<String, List<Integer>> header, final String[] record) throws Exception {
         return (GroupTravelerCsvRecord) getCsvRecordFactory().newInstance(header, record);
     }
-    
+
     /**
      * 
      * @see org.kuali.kfs.module.tem.document.service.TravelDocumentService#copyGroupTravelers(java.util.List, java.lang.String)
@@ -2260,7 +2263,7 @@ public class TravelDocumentServiceImpl implements TravelDocumentService {
     }
 
     public void adjustEncumbranceForAmendment(final TravelDocument taDocument) {}
-    
+
     public List<String> getDefaultAcceptableFileExtensions() {
         return defaultAcceptableFileExtensions;
     }

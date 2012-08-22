@@ -33,6 +33,7 @@
     <login.user>williamh</login.user>
     <default.context.path>${project.parent.artifactId}</default.context.path>
     <jrebel.phase>generate-resources</jrebel.phase>
+    <rebel.root>${basedir}/../../</rebel.root>
   </properties>
   
   
@@ -118,8 +119,12 @@
                     <systemProperty>
                         <name>log4j.settings.file</name><value>${user.home}/main/${build.environment}/j2ee/log4j.properties</value>
                     </systemProperty>
+                    <systemProperty>
+                        <name>rebel.spring_plugin</name><value>false</value>
+                    </systemProperty>
                 </systemProperties>
                 <scanIntervalSeconds>0</scanIntervalSeconds>
+                <jvmArgs>-javaagent:${rebel.home}/jrebel.jar</jvmArgs>
                 <webAppConfig>
                     <contextPath>/kfs-tem</contextPath>
                     <descriptor>src/main/webapp/WEB-INF/web.xml</descriptor>
@@ -212,6 +217,7 @@
             </activation>
             <properties>
                 <jrebel.phase>none</jrebel.phase>
+                <rebel.root></rebel.root>
             </properties>
         </profile>
     </profiles>
