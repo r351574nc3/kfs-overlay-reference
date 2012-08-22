@@ -111,6 +111,7 @@
             	</div>
             </td>
             <td valign="top" nowrap class="infoline">
+                typecode=${otherExpenseAttributes.travelExpenseTypeCode}
             	<div align="center">
             		<c:if test="${! empty detailObject.travelExpenseTypeCode}" >
 					<kul:htmlControlAttribute

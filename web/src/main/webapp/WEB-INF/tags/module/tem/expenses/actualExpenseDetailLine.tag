@@ -120,6 +120,7 @@
 	</td>
 	<td valign="top" class="infoline">
 		<div align="center">
+             expense = ${expense}
 			<c:if test="${detailObject.travelExpenseTypeCode.receiptRequired}">
 				<kul:htmlControlAttribute
 					attributeEntry="${otherExpenseAttributes.missingReceipt}"

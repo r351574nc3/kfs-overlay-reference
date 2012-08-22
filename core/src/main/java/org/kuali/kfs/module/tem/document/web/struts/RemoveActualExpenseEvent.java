@@ -26,16 +26,15 @@ import org.kuali.kfs.module.tem.document.TravelDocument;
 import org.kuali.kfs.module.tem.document.service.TravelDocumentService;
 import org.kuali.kfs.module.tem.document.web.bean.TravelMvcWrapperBean;
 import org.kuali.kfs.module.tem.service.AccountingDistributionService;
-import org.kuali.kfs.sys.context.SpringContext;
 import org.kuali.rice.kns.service.KualiRuleService;
 
 public class RemoveActualExpenseEvent implements Observer {
     private static final int WRAPPER_ARG_IDX       = 0;
     private static final int SELECTED_LINE_ARG_IDX = 1;
     
-    protected TravelDocumentService travelDocumentService;
-    protected AccountingDistributionService accountingDistributionService;    
-    protected KualiRuleService ruleService;
+    private TravelDocumentService travelDocumentService;
+    private AccountingDistributionService accountingDistributionService;
+    private KualiRuleService ruleService;
     
     @Override
     public void update(Observable arg0, Object arg1) {
@@ -71,7 +70,7 @@ public class RemoveActualExpenseEvent implements Observer {
         return travelDocumentService;
     }
     
-    protected void setTravelDocumentService(final TravelDocumentService travelDocumentService) {
+    public void setTravelDocumentService(final TravelDocumentService travelDocumentService) {
         this.travelDocumentService = travelDocumentService;
     }
 
@@ -84,7 +83,7 @@ public class RemoveActualExpenseEvent implements Observer {
         return ruleService;
     }
     
-    protected void setRuleService(final KualiRuleService ruleService) {
+    public void setRuleService(final KualiRuleService ruleService) {
         this.ruleService = ruleService;
     }
     
@@ -92,7 +91,7 @@ public class RemoveActualExpenseEvent implements Observer {
         return accountingDistributionService;
     }  
     
-    protected void setAccountingDistributionService(final AccountingDistributionService accountingDistributionService) {
+    public void setAccountingDistributionService(final AccountingDistributionService accountingDistributionService) {
         this.accountingDistributionService = accountingDistributionService;
     }
 }
