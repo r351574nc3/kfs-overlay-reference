@@ -21,7 +21,7 @@ limitations under the License.
     <version>0.0.23</version>
   </parent>
   <groupId>com.rsmart.kuali.kfs</groupId>
-  <artifactId>kfs-tem</artifactId>
+  <artifactId>kfs</artifactId>
   <packaging>pom</packaging>
   <name>Kuali Financial System</name>
   <inceptionYear>2012</inceptionYear>
