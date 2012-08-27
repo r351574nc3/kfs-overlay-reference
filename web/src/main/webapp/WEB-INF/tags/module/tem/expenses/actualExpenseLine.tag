@@ -107,17 +107,16 @@
 					<kul:htmlControlAttribute
 						attributeEntry="${otherExpenseAttributes.taxable}"
 						property="${expense}.taxable"
-						readOnly="!fullEntryMode || lineNumber !=null }" />
+						readOnly="${! fullEntryMode || lineNumber != null }" />
             	</div>
             </td>
             <td valign="top" nowrap class="infoline">
-                typecode=${otherExpenseAttributes.travelExpenseTypeCode}
             	<div align="center">
             		<c:if test="${! empty detailObject.travelExpenseTypeCode}" >
 					<kul:htmlControlAttribute
 						attributeEntry="${otherExpenseAttributes.travelExpenseTypeCode.receiptRequired}"
 						property="${expense}.travelExpenseTypeCode.receiptRequired"
-						readOnly="${!fullEntryMode || lineNumber !=null }" />
+                        readOnly="true" />
 					</c:if>
 				</div>
             </td>

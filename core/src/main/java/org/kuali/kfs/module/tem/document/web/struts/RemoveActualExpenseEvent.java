@@ -15,7 +15,7 @@
  */
 package org.kuali.kfs.module.tem.document.web.struts;
 
-import static org.kuali.kfs.module.tem.util.BufferedLogger.debug;
+import static org.kuali.kfs.module.tem.util.BufferedLogger.*;
 
 import java.util.List;
 import java.util.Observable;
@@ -56,8 +56,7 @@ public class RemoveActualExpenseEvent implements Observer {
         wrapper.getNewActualExpenseLines().remove(deleteIndex.intValue());
                 
         List<ActualExpense> actualExpenses = wrapper.getNewActualExpenseLines();
-                
-        //wrapper.getNewActualExpenseLines().add(new ActualExpense());
+        
         wrapper.setDistribution(getAccountingDistributionService().buildDistributionFrom(document));
     }
   
@@ -66,7 +65,7 @@ public class RemoveActualExpenseEvent implements Observer {
      * 
      * @return Returns the travelReimbursementService.
      */
-    protected TravelDocumentService getTravelDocumentService() {
+    public TravelDocumentService getTravelDocumentService() {
         return travelDocumentService;
     }
     
@@ -79,7 +78,7 @@ public class RemoveActualExpenseEvent implements Observer {
      * 
      * @return Returns the kualiRuleseService.
      */
-    protected KualiRuleService getRuleService() {
+    public KualiRuleService getRuleService() {
         return ruleService;
     }
     
@@ -87,7 +86,10 @@ public class RemoveActualExpenseEvent implements Observer {
         this.ruleService = ruleService;
     }
     
-    protected AccountingDistributionService getAccountingDistributionService() {
+    public AccountingDistributionService getAccountingDistributionService() {
+        if (accountingDistributionService == null) {
+            accountingDistributionService = org.kuali.kfs.sys.context.SpringContext.getBean(AccountingDistributionService.class);
+        }
         return accountingDistributionService;
     }  
     

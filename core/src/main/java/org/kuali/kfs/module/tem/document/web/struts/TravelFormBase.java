@@ -19,12 +19,9 @@ import static org.kuali.kfs.module.tem.TemConstants.ENABLE_PER_DIEM_LOOKUP_LINKS
 import static org.kuali.kfs.module.tem.TemConstants.ENABLE_PRIMARY_DESTINATION_ATTRIBUTE;
 import static org.kuali.kfs.sys.KFSConstants.EXTERNALIZABLE_IMAGES_URL_KEY;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.InputStream;
-
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,9 +37,9 @@ import org.kuali.kfs.module.tem.TemConstants.TravelParameters;
 import org.kuali.kfs.module.tem.TemParameterConstants;
 import org.kuali.kfs.module.tem.TemPropertyConstants;
 import org.kuali.kfs.module.tem.businessobject.AccountingDocumentRelationship;
+import org.kuali.kfs.module.tem.businessobject.ActualExpense;
 import org.kuali.kfs.module.tem.businessobject.GroupTraveler;
 import org.kuali.kfs.module.tem.businessobject.ImportedExpense;
-import org.kuali.kfs.module.tem.businessobject.ActualExpense;
 import org.kuali.kfs.module.tem.businessobject.TemDistributionAccountingLine;
 import org.kuali.kfs.module.tem.businessobject.TransportationMode;
 import org.kuali.kfs.module.tem.document.TravelDocument;
@@ -64,7 +61,6 @@ import org.kuali.rice.kns.service.NoteService;
 import org.kuali.rice.kns.service.ParameterService;
 import org.kuali.rice.kns.util.KualiDecimal;
 import org.kuali.rice.kns.util.ObjectUtils;
-import org.kuali.rice.kns.util.TypedArrayList;
 import org.kuali.rice.kns.web.ui.ExtraButton;
 import org.kuali.rice.kns.web.ui.HeaderField;
 import org.kuali.rice.kns.workflow.service.KualiWorkflowDocument;
@@ -522,15 +518,11 @@ public abstract class TravelFormBase extends KualiAccountingDocumentFormBase imp
             relatedDocumentNotes = new HashMap<String, List<Note>>();
             for (List<Document> documents : relatedDocuments.values()) {
                 for (Document document : documents) {
-                    List<Note> listOfNotes = new TypedArrayList(Note.class);
-                    List<Note> tmpNotes = SpringContext.getBean(NoteService.class).getByRemoteObjectId(document.getDocumentHeader().getObjectId());
-                    // FIXME if NoteService returns notes in descending order (newer ones first) then remove the following
-                    // reverse the order of notes retrieved so that newest note is in the front
-                    for (int i = tmpNotes.size() - 1; i >= 0; i--) {
-                        Note note = tmpNotes.get(i);
-                        listOfNotes.add(note);
-                    }
-                    relatedDocumentNotes.put(document.getDocumentNumber(), listOfNotes);
+                    //retrieve by object Id base on document's usage with BoNotesSupport
+                    List<Note> remoteNotes = SpringContext.getBean(NoteService.class).getByRemoteObjectId(
+                            document.isBoNotesSupport()? document.getObjectId() : document.getDocumentHeader().getObjectId());
+                    Collections.reverse(remoteNotes);
+                    relatedDocumentNotes.put(document.getDocumentNumber(), remoteNotes);
                 }
             }
         }
@@ -789,20 +781,6 @@ public abstract class TravelFormBase extends KualiAccountingDocumentFormBase imp
         return groupTravelerImportFile;
     }
 
-    /**
-     *  Completely reads all the files bytes into memory.
-     *  
-     * @return InputStream of all the bytes
-     * @throws an Exception if there's a problem with the input data (like it can't be read for some reason)
-     * @see org.kuali.kfs.module.tem.document.web.bean.TravelMvcWrapperBean
-     */
-    public InputStream getGroupTravelerImportStream() throws Exception {
-        final DataInputStream dis  = new DataInputStream(getGroupTravelerImportFile().getInputStream());
-        final byte[] fileBytes     = new byte[getGroupTravelerImportFile().getFileSize()];
-        dis.readFully(fileBytes);
-        return new ByteArrayInputStream(fileBytes);
-    }
-
     public void setGroupTravelerImportFile(FormFile groupTravelerImportFile) {
         this.groupTravelerImportFile = groupTravelerImportFile;
     }
@@ -895,6 +873,10 @@ public abstract class TravelFormBase extends KualiAccountingDocumentFormBase imp
             distribution = new ArrayList<AccountingDistribution>();
         }
         return distribution;
+    }
+    
+    public Boolean getHasSelectedDistributionRemainingAmount() {
+        return KualiDecimal.ZERO.equals(getSelectedDistributionRemainingAmount());
     }
 
     public KualiDecimal getSelectedDistributionRemainingAmount() {

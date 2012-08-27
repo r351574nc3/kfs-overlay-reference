@@ -86,9 +86,8 @@
 										readOnly="true" />
 								</td>
 								<c:set var="tempValue" value="${temfunc:add(dist.remainingAmount,tempValue)}" />
-								<!-- c:set var="tempValue" value="${temfunc:add((dist.disabled?0:dist.remainingAmount),tempValue)}" / -->
-								<c:set var="selectedCount" value="${selectedCount + (dist.selected?1:0)}" />
-								<c:set var="selectedValue" value="${temfunc:add(selectedValue,(dist.selected?dist.subTotal:0))}" />
+								<c:set var="selectedCount" value="${selectedCount + (dist.selected ? 1 : 0)}" />
+								<c:set var="selectedValue" value="${temfunc:add(selectedValue,(dist.selected ? dist.subTotal : 0))}" />
 							</tr>
 						</logic:iterate>
 					</c:when>
@@ -106,10 +105,10 @@
 								</c:when>
 								<c:otherwise>
 									<html:image
-										property="methodToCall.selectAllDistributions.line${(fn:length(KualiForm.distribution) == selectedCount)?TemConstants.UNSELECT_ALL_INDEX:TemConstants.SELECT_ALL_INDEX }"
-										src="${ConfigProperties.externalizable.images.url}tinybutton-${(fn:length(KualiForm.distribution) == selectedCount)?'un':''}selectall.gif"
-										alt="${(fn:length(KualiForm.distribution) == selectedCount)?'Uns':'S'}elect All Distributions" 
-										title="${(fn:length(KualiForm.distribution) == selectedCount)?'Uns':'S'}elect All Distributions"
+										property="methodToCall.selectAllDistributions.line${(fn:length(KualiForm.distribution) == selectedCount) ? TemConstants.UNSELECT_ALL_INDEX : TemConstants.SELECT_ALL_INDEX }"
+										src="${ConfigProperties.externalizable.images.url}tinybutton-${(fn:length(KualiForm.distribution) == selectedCount)? 'un' : ''}selectall.gif"
+										alt="${(fn:length(KualiForm.distribution) == selectedCount)? 'Uns' : 'S'}elect All Distributions" 
+										title="${(fn:length(KualiForm.distribution) == selectedCount)? 'Uns' : 'S'}elect All Distributions"
 										styleClass="tinybutton" />
 									<html:image
 										property="methodToCall.distribute"
@@ -123,7 +122,7 @@
 					<th class="bord-1-b" align="right">Total Remaining:</th>
 					<c:set var="numValue"
 						value="${remainingDistribution == null ? tempValue : remainingDistribution}" />
-					<c:set var="formattedValue" value="${fn:endsWith(numValue,'.0')?'0':''}" />
+					<c:set var="formattedValue" value="${fn:endsWith(numValue,'.0') ? '0' : ''}" />
 					<td class="inline">${numValue}${formattedValue} USD
 						<input type="hidden" id="selectedDistributionAmount" value="${KualiForm.selectedDistributionRemainingAmount}" />
 						<input type="hidden" id="distributionAmount" value="${KualiForm.fullDistributionSubTotal}" />
