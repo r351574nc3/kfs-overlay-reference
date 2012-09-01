@@ -1339,7 +1339,6 @@
 		<property name="travelerService" ref="travelerService" />
 		<property name="accountingDocumentRelationshipService" ref="temAccountingDocumentRelationshipService" />
     </bean>
-    
     <!-- CSV Refactory Stuff -->
     <bean id="groupTravelerCsvRecordFactory" class="org.kuali.kfs.module.tem.service.CsvRecordFactory">
       <constructor-arg type="java.lang.Class">
@@ -1355,4 +1354,5 @@
         </map>
       </property>
     </bean>
+
 </beans>
