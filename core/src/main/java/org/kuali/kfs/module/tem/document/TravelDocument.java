@@ -17,6 +17,7 @@ package org.kuali.kfs.module.tem.document;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 import org.kuali.kfs.fp.document.DisbursementVoucherDocument;
 import org.kuali.kfs.integration.tem.TravelEntertainmentMovingTravelDocument;
@@ -53,7 +54,13 @@ public interface TravelDocument extends AccountingDocument, TravelEntertainmentM
 
     void initiateDocument();
 
-    public void updateAppDocStatus(String newStatus);
+    /**
+     * Return true if app doc status has been updated in Workflow
+     * 
+     * @param newStatus
+     * @return
+     */
+    public boolean updateAppDocStatus(String newStatus);
     
     @Override
     String getTravelDocumentIdentifier();
@@ -356,4 +363,22 @@ public interface TravelDocument extends AccountingDocument, TravelEntertainmentM
      * @param traveler {@link GroupTraveler} instance that is valid
      */
     void addGroupTravelerLine(final GroupTraveler traveler);
+    
+    /**
+     * Determine if special circumstances tab should be open 
+     * 
+     * Rule for default open: 
+     * 1. Amount provided for expense limit
+     * 2. Any of the special circumstances question (with boolean option) is selected
+     * 
+     * @return
+     */
+    public boolean isSpecialCircumstancesDefaultOpen();
+    
+    /**
+     * Get the Travel Document disapproval app doc status map 
+     * 
+     * @return
+     */
+    public Map<String, String> getDisapprovedAppDocStatusMap();
 }

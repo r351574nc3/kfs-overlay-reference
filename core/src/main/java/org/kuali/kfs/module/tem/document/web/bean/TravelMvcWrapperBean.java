@@ -15,8 +15,6 @@
  */
 package org.kuali.kfs.module.tem.document.web.bean;
 
-import java.io.InputStream;
-
 import java.util.List;
 import java.util.Map;
 
@@ -228,37 +226,37 @@ public interface TravelMvcWrapperBean {
      * Gets the enableTaxable attribute. 
      * @return Returns the enableTaxable.
      */
-    boolean getEnableImportedTaxable();
+    public boolean getEnableImportedTaxable();
 
     /**
      * Sets the enableTaxable attribute value.
      * @param enableTaxable The enableTaxable to set.
      */
-    void setEnableImportedTaxable(boolean enableImportedTaxable);
+    public void setEnableImportedTaxable(boolean enableImportedTaxable);
     
     /**
      * Gets the accountDistributionnextSourceLineNumber attribute. 
      * @return Returns the accountDistributionnextSourceLineNumber.
      */
-    Integer getAccountDistributionnextSourceLineNumber();
+    public Integer getAccountDistributionnextSourceLineNumber();
 
     /**
      * Sets the accountDistributionnextSourceLineNumber attribute value.
      * @param accountDistributionnextSourceLineNumber The accountDistributionnextSourceLineNumber to set.
      */
-    void setAccountDistributionnextSourceLineNumber(Integer accountDistributionnextSourceLineNumber);
+    public void setAccountDistributionnextSourceLineNumber(Integer accountDistributionnextSourceLineNumber);
 
     /**
      * Gets the accountDistributionnewSourceLine attribute. 
      * @return Returns the accountDistributionnewSourceLine.
      */
-    TemDistributionAccountingLine getAccountDistributionnewSourceLine();
+    public TemDistributionAccountingLine getAccountDistributionnewSourceLine();
 
     /**
      * Sets the accountDistributionnewSourceLine attribute value.
      * @param accountDistributionnewSourceLine The accountDistributionnewSourceLine to set.
      */
-    void setAccountDistributionnewSourceLine(TemDistributionAccountingLine accountDistributionnewSourceLine);
+    public void setAccountDistributionnewSourceLine(TemDistributionAccountingLine accountDistributionnewSourceLine);
     
     /**
      * Sets the sequence number appropriately for the passed in source accounting line using the value that has been stored in the
@@ -268,21 +266,14 @@ public interface TravelMvcWrapperBean {
      * @param line the accounting line to add to the list.
      * @see org.kuali.kfs.sys.document.AccountingDocument#addSourceAccountingLine(SourceAccountingLine)
      */
-    void addAccountDistributionsourceAccountingLine(TemDistributionAccountingLine line);
+    public void addAccountDistributionsourceAccountingLine(TemDistributionAccountingLine line);
 
-    KualiDecimal getDistributionRemainingAmount(boolean selectedDistributions);
+    public KualiDecimal getDistributionRemainingAmount(boolean selectedDistributions);
     
-    KualiDecimal getDistributionSubTotal(boolean selectedDistributions);
+    public KualiDecimal getDistributionSubTotal(boolean selectedDistributions);
     
-    List<TemDistributionAccountingLine> getAccountDistributionsourceAccountingLines();
+    public List<TemDistributionAccountingLine> getAccountDistributionsourceAccountingLines();
 
-    void setAccountDistributionsourceAccountingLines(List<TemDistributionAccountingLine> accountDistributionsourceAccountingLines);
+    public void setAccountDistributionsourceAccountingLines(List<TemDistributionAccountingLine> accountDistributionsourceAccountingLines);
 
-    /**
-     *  Completely reads all the files bytes into memory.
-     *  
-     * @return InputStream of all the bytes
-     * @throws an Exception if there's a problem with the input data (like it can't be read for some reason)
-     */
-    InputStream getGroupTravelerImportStream() throws Exception;
 }
