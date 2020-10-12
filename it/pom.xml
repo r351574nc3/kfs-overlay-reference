@@ -34,7 +34,7 @@ limitations under the License.
     <selenium-java.version>2.16.1</selenium-java.version>    
     <selenium-maven-plugin.version>2.0</selenium-maven-plugin.version>
     <maven-compiler-plugin.version>2.5</maven-compiler-plugin.version>
-    <junit.version>4.10</junit.version>
+    <junit.version>4.13.1</junit.version>
     <cxf-codegen-plugin.version>2.2.9</cxf-codegen-plugin.version>
     <remote.public.url>http://localhost:9090/organizationDelegate</remote.public.url>
     <it.browser>*firefox</it.browser>
